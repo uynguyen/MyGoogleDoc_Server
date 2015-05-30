@@ -10,11 +10,22 @@ package Pojo;
  * @author UyNguyen.ITUS
  */
 public class Account {
+
+    public Account(){}
+    public Account(int _ID, String _Username, String _Avatar, String _EMail) {
+        this._ID = _ID;
+        this._Username = _Username;
+        this._Avatar = _Avatar;
+        this._EMail = _EMail;
+    }
     private int _ID;
     private String _Username;
     private String _Avatar;
     private String _EMail;
 
+    
+    
+    
     /**
      * @return the _ID
      */

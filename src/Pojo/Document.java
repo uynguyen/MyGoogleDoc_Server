@@ -12,6 +12,19 @@ import java.util.Date;
  * @author UyNguyen.ITUS
  */
 public class Document {
+
+    public Document(int _ID, String _Name, String _Path, Date _DateCreate, int _IDOwner, int _IDPartners) {
+        this._ID = _ID;
+        this._Name = _Name;
+        this._Path = _Path;
+        this._DateCreate = _DateCreate;
+        this._IDOwner = _IDOwner;
+        this._IDPartners = _IDPartners;
+    }
+    
+    
+    
+    
     private int _ID;
     private String _Name;
     private String _Path;
