@@ -83,7 +83,7 @@ public class LogInThread implements Runnable {
                 bufferedWriter.flush();
                 bufferedWriter.write(listSize);
 
-                //Send Documents
+                //Send DocumentsList
                 for (int i = 0; i < listSize; i++) {
                     objectOutputStream.writeObject(documentList.get(i));
                 }
