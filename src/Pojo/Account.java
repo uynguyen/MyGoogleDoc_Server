@@ -5,11 +5,13 @@
  */
 package Pojo;
 
+import java.io.Serializable;
+
 /**
  *
  * @author UyNguyen.ITUS
  */
-public class Account {
+public class Account implements Serializable{
 
     public Account(){}
     public Account(int _ID, String _Username, String _Avatar, String _EMail) {
