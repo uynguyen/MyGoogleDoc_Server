@@ -32,7 +32,7 @@ public class AccountDAO {
                     String email = resultSet.getString("Email");
                     String avatar = resultSet.getString("Avatar");
 
-                    result = new Account(username, avatar, email);
+                    result = new Account(ID, username, avatar, email);
                 }
 
             }
