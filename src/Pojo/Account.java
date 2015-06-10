@@ -12,13 +12,13 @@ package Pojo;
 public class Account {
 
     public Account(){}
-    public Account(int _ID, String _Username, String _Avatar, String _EMail) {
-        this._ID = _ID;
+    public Account(String _Username, String _Avatar, String _EMail) {
+      
         this._Username = _Username;
         this._Avatar = _Avatar;
         this._EMail = _EMail;
     }
-    private int _ID;
+  
     private String _Username;
     private String _Avatar;
     private String _EMail;
@@ -26,19 +26,7 @@ public class Account {
     
     
     
-    /**
-     * @return the _ID
-     */
-    public int getID() {
-        return _ID;
-    }
-
-    /**
-     * @param _ID the _ID to set
-     */
-    public void setID(int _ID) {
-        this._ID = _ID;
-    }
+  
 
     /**
      * @return the _Username

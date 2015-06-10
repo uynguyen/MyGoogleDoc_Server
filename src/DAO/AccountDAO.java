@@ -32,7 +32,7 @@ public class AccountDAO {
                     String email = resultSet.getString("Email");
                     String avatar = resultSet.getString("Avatar");
 
-                    result = new Account(ID, username, avatar, email);
+                    result = new Account(username, avatar, email);
                 }
 
             }
@@ -69,17 +69,21 @@ public class AccountDAO {
 
     public static boolean register(Account account, String password) {
 
-        try {
-            connectionHelper.openConnection();
+        if (!checkExistAccount(account.getUsername())) {
+            try {
+                connectionHelper.openConnection();
 
-            String strSQL = "INSERT INTO accounts(UserName, Password, Avatar, Email) "
-                    + " VALUES ( '" + account.getUsername() + "'," + password + ",'" + account.getAvatar() + "','" + account.getEMail() + "')";
+                String strSQL = "INSERT INTO accounts(UserName, Password, Avatar, Email) "
+                        + " VALUES ( '" + account.getUsername() + "'," + password + ",'" + account.getAvatar() + "','" + account.getEMail() + "')";
 
-            connectionHelper.excuteNonQuery(strSQL);
-            return true;
+                connectionHelper.excuteNonQuery(strSQL);
+                return true;
 
-        } catch (Exception e) {
-            connectionHelper.closeConnection();
+            } catch (Exception e) {
+                connectionHelper.closeConnection();
+                return false;
+            }
+        } else {
             return false;
         }
 
