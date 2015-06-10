@@ -5,13 +5,14 @@
  */
 package Pojo;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  * @author UyNguyen.ITUS
  */
-public class Document {
+public class Document implements Serializable{
 
     public Document(int _ID, String _Name, String _Path, Date _DateCreate, int _IDOwner, int _IDPartners) {
         this._ID = _ID;

@@ -17,15 +17,15 @@ import java.util.ArrayList;
  */
 public class MyBus {
 
-    public Account checkLoginInfo(String username, String password) {
+    public static Account checkLoginInfo(String username, String password) {
         return AccountDAO.checkLoginInfo(username, password);
     }
 
-    public boolean register(Account account, String password) {
+    public static boolean register(Account account, String password) {
         return AccountDAO.register(account, password);
     }
 
-    public ArrayList<Document> getListDocument(int IDAcount) {
+    public static ArrayList<Document> getListDocument(int IDAcount) {
         return DocumentDAO.getListDocuments(IDAcount);
 
     }
