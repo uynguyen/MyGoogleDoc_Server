@@ -5,16 +5,10 @@
  */
 package mygoogledoc_server;
 
-import Threads.LogInThread;
-import Threads.RegisterThread;
-import java.io.BufferedReader;
+import Threads.HandleClientRequestThread;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -35,19 +29,11 @@ public class MyGoogleDoc_Server {
             do {
                 //Accept a client
                 client = server.accept();
-                InputStream inputStream = client.getInputStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-
-                //Get the flag (Login or Register)
-                String flag = bufferedReader.readLine();
-
-                if (flag.equalsIgnoreCase("login")) {
-                    LogInThread logInThread = new LogInThread(client);
-                    logInThread.run();
-                } else {
-                    RegisterThread registerThread = new RegisterThread(client);
-                    registerThread.run();
-                }
+                
+                System.out.println(client.getPort());
+                
+                HandleClientRequestThread handle = new HandleClientRequestThread(client);
+                handle.run();
 
             } while (true);
         } catch (IOException ex) {

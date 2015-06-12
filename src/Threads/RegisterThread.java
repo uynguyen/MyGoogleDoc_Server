@@ -6,18 +6,12 @@
 package Threads;
 
 import Bus.MyBus;
+import CommunicatePackage.RegisterPackage;
 import Pojo.Account;
-import Pojo.Document;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.Socket;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,26 +22,41 @@ import java.util.logging.Logger;
 public class RegisterThread implements Runnable {
 
     Thread t = null;
-    Socket client;
+    ObjectOutputStream objectOutputStream;
+    ObjectInputStream objectInputStream;
 
-    public RegisterThread(Socket client) {
-        this.client = client;
+    public RegisterThread(Socket client, ObjectOutputStream output, ObjectInputStream input) {
+        objectInputStream = input;
+        objectOutputStream = output;
         t = new Thread(this);
     }
 
     @Override
     public void run() {
-        InputStream inputStream = null;
-        OutputStream outputStream = null;
-
-        try {
-            inputStream = client.getInputStream();
-            outputStream = client.getOutputStream();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream));
-
+        try {                        
+            RegisterPackage message = (RegisterPackage)objectInputStream.readObject();
+            
+            Account newAccount = new Account();
+            newAccount.setUsername(message.username);
+            newAccount.setEMail(message.email);
+            newAccount.setAvatar("Images/default_avatar.jpg");
+            
+            boolean result = MyBus.register(newAccount, message.password);
+            if(result == true){
+                objectOutputStream.writeBoolean(true);
+                objectOutputStream.flush();
+            } else {
+                objectOutputStream.writeBoolean(false);
+                objectOutputStream.flush();
+            }
+            
+            objectInputStream.close();
+            objectOutputStream.close();
+            
         } catch (IOException ex) {
             Logger.getLogger(LogInThread.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(RegisterThread.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
