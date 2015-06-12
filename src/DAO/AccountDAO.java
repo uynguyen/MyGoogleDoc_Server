@@ -21,16 +21,16 @@ public class AccountDAO {
         Account result = null;
         try {
             connectionHelper.openConnection();
-            String strSQL = "select * from accounts acc where acc.UserName = '" + username + "'";
+            String strSQL = "select * from accounts acc where acc.username = '" + username + "'";
 
             ResultSet resultSet = connectionHelper.excuteQuery(strSQL);
             while (resultSet.next()) {
-                String pass = resultSet.getString("Password");
+                String pass = resultSet.getString("password");
                 if (password.compareTo(pass) == 0) {// Đúng
-                    int ID = resultSet.getInt("ID");
+                    int ID = resultSet.getInt("id");
 
-                    String email = resultSet.getString("Email");
-                    String avatar = resultSet.getString("Avatar");
+                    String email = resultSet.getString("email");
+                    String avatar = resultSet.getString("avatar");
 
                     result = new Account(ID, username, avatar, email);
                 }
@@ -51,7 +51,7 @@ public class AccountDAO {
 
         try {
             connectionHelper.openConnection();
-            String strSQL = "select * from accounts acc where acc.UserName = '" + username + "'";
+            String strSQL = "select * from accounts acc where acc.username = '" + username + "'";
 
             ResultSet resultSet = connectionHelper.excuteQuery(strSQL);
             while (resultSet.next()) {
@@ -64,6 +64,7 @@ public class AccountDAO {
             connectionHelper.closeConnection();
             return false;
         }
+        connectionHelper.closeConnection();
         return false;
     }
 
@@ -73,7 +74,7 @@ public class AccountDAO {
             try {
                 connectionHelper.openConnection();
 
-                String strSQL = "INSERT INTO accounts(UserName, Password, Avatar, Email) "
+                String strSQL = "INSERT INTO accounts(username, password, avatar, email) "
                         + " VALUES ( '" + account.getUsername() + "'," + password + ",'" + account.getAvatar() + "','" + account.getEMail() + "')";
 
                 connectionHelper.excuteNonQuery(strSQL);
