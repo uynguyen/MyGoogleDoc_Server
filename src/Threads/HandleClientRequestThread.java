@@ -34,7 +34,7 @@ public class HandleClientRequestThread implements Runnable{
             boolean flag = objectInputStream.readBoolean();
             
             if(flag == true){
-                LogInThread logInThread = new LogInThread(client);
+                LogInThread logInThread = new LogInThread(client, objectOutputStream, objectInputStream);
                 logInThread.run();
             } else {
                 RegisterThread registerThread = new RegisterThread(client, objectOutputStream, objectInputStream);
