@@ -65,6 +65,8 @@ public class LogInThread implements Runnable {
                 inputStream.close();
                 outputStream.close();
             } else {
+                
+                
                 //Object stream for sending Account and Document
                 ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
 
@@ -86,6 +88,15 @@ public class LogInThread implements Runnable {
                 //Send DocumentsList
                 for (int i = 0; i < listSize; i++) {
                     objectOutputStream.writeObject(documentList.get(i));
+                }
+                
+                while(true){
+                    
+                    
+                    
+                    
+                    
+                    
                 }
             }
 

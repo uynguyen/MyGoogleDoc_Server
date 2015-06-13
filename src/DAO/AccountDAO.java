@@ -21,19 +21,18 @@ public class AccountDAO {
         Account result = null;
         try {
             connectionHelper.openConnection();
-            String strSQL = "select * from accounts acc where acc.username = '" + username + "'";
+            String strSQL = "select * from accounts acc where acc.username = '" + username + "' and acc.password = md5('" + password + "')";
 
             ResultSet resultSet = connectionHelper.excuteQuery(strSQL);
             while (resultSet.next()) {
-                String pass = resultSet.getString("password");
-                if (password.compareTo(pass) == 0) {// Đúng
+
                     int ID = resultSet.getInt("id");
 
                     String email = resultSet.getString("email");
                     String avatar = resultSet.getString("avatar");
 
                     result = new Account(ID, username, avatar, email);
-                }
+                
 
             }
 
@@ -75,7 +74,7 @@ public class AccountDAO {
                 connectionHelper.openConnection();
 
                 String strSQL = "INSERT INTO accounts(username, password, avatar, email) "
-                        + " VALUES ( '" + account.getUsername() + "'," + password + ",'" + account.getAvatar() + "','" + account.getEMail() + "')";
+                        + " VALUES ( '" + account.getUsername() + "',md5('" + password + "'),'" + account.getAvatar() + "','" + account.getEMail() + "')";
 
                 connectionHelper.excuteNonQuery(strSQL);
                 return true;
