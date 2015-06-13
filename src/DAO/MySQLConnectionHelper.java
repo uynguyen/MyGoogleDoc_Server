@@ -57,7 +57,7 @@ public class MySQLConnectionHelper {
         try {
 
             Statement state = con.createStatement();
-            state.executeQuery(sql);
+            state.execute(sql);
             return true;
         } catch (SQLException ex) {
             ex.printStackTrace();
