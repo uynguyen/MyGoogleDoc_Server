@@ -27,17 +27,17 @@ public class DocumentDAO {
 
         try {
             //---------Lấy những tài liệu thằng này làm chủ
-            String strSQL = "select * from documents doc where doc.IDOwner = '" + IDAccount + "'";
+            String strSQL = "select * from documents doc where doc.id_owner = '" + IDAccount + "'";
 
             ResultSet resultSet = connectionHelper.excuteQuery(strSQL);
             while (resultSet.next()) {
 
-                int ID = resultSet.getInt("ID");
-                String name = resultSet.getString("Name");
-                String path = resultSet.getString("Path");
-                Date dateCreate = resultSet.getDate("DateCreate");
+                int ID = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                String path = resultSet.getString("path");
+                Date dateCreate = resultSet.getDate("date_create");
 
-                int IDGroup = resultSet.getInt("IDPartners");
+                int IDGroup = resultSet.getInt("id_partners");
 
                 Document doc = new Document(ID, name, path, dateCreate, IDAccount, IDGroup);
                 result.add(doc);
@@ -50,14 +50,14 @@ public class DocumentDAO {
             resultSet = connectionHelper.excuteQuery(strSQL);
             while (resultSet.next()) {
 
-                int IDGroup = resultSet.getInt("IDPartners");
+                int IDGroup = resultSet.getInt("id_partners");
 
                 if (checkBelongGroup(IDGroup, IDAccount)) {
-                    int ID = resultSet.getInt("ID");
-                    String name = resultSet.getString("Name");
-                    String path = resultSet.getString("Path");
-                    Date dateCreate = resultSet.getDate("DateCreate");
-                    int idOwner = resultSet.getInt("IDOwner");
+                    int ID = resultSet.getInt("id");
+                    String name = resultSet.getString("name");
+                    String path = resultSet.getString("path");
+                    Date dateCreate = resultSet.getDate("date_create");
+                    int idOwner = resultSet.getInt("id_owner");
 
                     Document doc = new Document(ID, name, path, dateCreate, idOwner, IDGroup);
                     result.add(doc);
@@ -82,7 +82,7 @@ public class DocumentDAO {
         connectionHelper.openConnection();
         try {
 
-            String strSQLTemp = "select * from partnerdetails t where t.IDGroup ='" + IDGroup + "' and t.IDMember ='" + IDAccount + "'";
+            String strSQLTemp = "select * from partnerdetails t where t.id_group ='" + IDGroup + "' and t.id_member ='" + IDAccount + "'";
             ResultSet resultSetTemp = connectionHelper.excuteQuery(strSQLTemp);
             while (resultSetTemp.next()) {
                 connectionHelper.closeConnection();
