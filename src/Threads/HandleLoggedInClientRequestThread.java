@@ -22,7 +22,7 @@ public class HandleLoggedInClientRequestThread implements Runnable{
 
     public HandleLoggedInClientRequestThread(Socket client){
         this.client = client;
-        t  = new Thread(this);        
+        t  = new Thread(this);
     }
     
     @Override

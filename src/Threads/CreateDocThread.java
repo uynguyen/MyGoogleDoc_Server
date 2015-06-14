@@ -5,28 +5,65 @@
  */
 package Threads;
 
+import Bus.MyBus;
+import CommunicatePackage.CreateDocPackage;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Thanh Tung
  */
-public class CreateDocThread implements Runnable{
+public class CreateDocThread implements Runnable {
 
     Thread t;
     ObjectOutputStream objectOutputStream;
     ObjectInputStream objectInputStream;
-    
-    public CreateDocThread(ObjectOutputStream output, ObjectInputStream input){
+
+    public CreateDocThread(ObjectOutputStream output, ObjectInputStream input) {
         this.objectInputStream = input;
         this.objectOutputStream = output;
         t = new Thread(this);
     }
-    
+
     @Override
     public void run() {
-        
+        try {
+            //Receive create doc information
+            CreateDocPackage message = (CreateDocPackage) objectInputStream.readObject();
+
+            boolean result = MyBus.createNewDocument(message.idOwner, message.title);                        
+
+            if (result) {
+                //Create listening port
+                ServerSocket server = new ServerSocket(0);
+                int port = server.getLocalPort();
+
+                //Create workingThread with this port
+                WorkingServerThread workingServerThread = new WorkingServerThread(server);
+                workingServerThread.run();
+
+                //Return the working port to client
+                objectOutputStream.writeInt(port);
+                objectOutputStream.flush();
+            } else {
+                objectOutputStream.writeInt(-1);
+                objectOutputStream.flush();
+            }
+            
+            objectInputStream.close();
+            objectOutputStream.flush();
+            objectOutputStream.close();
+
+        } catch (IOException ex) {
+            Logger.getLogger(CreateDocThread.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(CreateDocThread.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-    
+
 }
