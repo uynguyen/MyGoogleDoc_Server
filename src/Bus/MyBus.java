@@ -29,4 +29,8 @@ public class MyBus {
         return DocumentDAO.getListDocuments(IDAcount);
 
     }
+    public static boolean createNewDocument(int id_Owner, String title )
+    {
+        return DocumentDAO.createNewDocument(id_Owner, title);
+    }
 }
