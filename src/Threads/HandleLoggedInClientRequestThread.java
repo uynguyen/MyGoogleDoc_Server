@@ -5,6 +5,7 @@
  */
 package Threads;
 
+import Pojo.EnumUserAction;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -33,9 +34,9 @@ public class HandleLoggedInClientRequestThread implements Runnable{
             ObjectInputStream objectInputStream = new ObjectInputStream(client.getInputStream());
             
             //flag create new doc or connect to an existing doc
-            boolean flag = objectInputStream.readBoolean();
+            int flag = objectInputStream.readInt();
             
-            if(flag == true){
+            if(flag == EnumUserAction.CREATEDOC.getValue()){
                 CreateDocThread createDocThread = new CreateDocThread(objectOutputStream, objectInputStream);
                 createDocThread.run();
             } else {
