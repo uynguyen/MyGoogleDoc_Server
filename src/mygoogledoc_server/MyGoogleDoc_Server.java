@@ -6,6 +6,7 @@
 package mygoogledoc_server;
 
 import Threads.HandleClientRequestThread;
+import Threads.SuperServerThread;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -23,6 +24,11 @@ public class MyGoogleDoc_Server {
      */
     public static void main(String[] args) {
         try {
+            //Running SuperServerThread
+            
+            SuperServerThread superServerThread = new SuperServerThread();
+            superServerThread.run();
+            
             //Host server at port 51399
             ServerSocket server = new ServerSocket(51399);
             Socket client = null;

@@ -28,7 +28,7 @@ public class LogInThread implements Runnable {
     ObjectOutputStream objectOutputStream;
     ObjectInputStream objectInputStream;
 
-    public LogInThread(Socket client, ObjectOutputStream output, ObjectInputStream input) {
+    public LogInThread(ObjectOutputStream output, ObjectInputStream input) {
         this.objectInputStream = input;
         this.objectOutputStream = output;
         t = new Thread(this);

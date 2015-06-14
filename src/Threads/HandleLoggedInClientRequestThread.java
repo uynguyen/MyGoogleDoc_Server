@@ -14,16 +14,17 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author ThanhTung
+ * @author Thanh Tung
  */
-public class HandleClientRequestThread implements Runnable{
+public class HandleLoggedInClientRequestThread implements Runnable{
     Thread t;
     Socket client;
 
-    public HandleClientRequestThread(Socket client){
+    public HandleLoggedInClientRequestThread(Socket client){
         this.client = client;
         t  = new Thread(this);        
     }
+    
     @Override
     public void run() {
         try {
@@ -31,19 +32,18 @@ public class HandleClientRequestThread implements Runnable{
             objectOutputStream.flush();
             ObjectInputStream objectInputStream = new ObjectInputStream(client.getInputStream());
             
+            //flag create new doc or connect to an existing doc
             boolean flag = objectInputStream.readBoolean();
             
             if(flag == true){
-                LogInThread logInThread = new LogInThread(objectOutputStream, objectInputStream);
-                logInThread.run();
+                CreateDocThread createDocThread = new CreateDocThread(objectOutputStream, objectInputStream);
+                createDocThread.run();
             } else {
-                RegisterThread registerThread = new RegisterThread( objectOutputStream, objectInputStream);
-                registerThread.run();
+                
             }
             
         } catch (IOException ex) {
             Logger.getLogger(HandleClientRequestThread.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
 }

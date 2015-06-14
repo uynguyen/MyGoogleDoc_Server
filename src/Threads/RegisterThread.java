@@ -25,7 +25,7 @@ public class RegisterThread implements Runnable {
     ObjectOutputStream objectOutputStream;
     ObjectInputStream objectInputStream;
 
-    public RegisterThread(Socket client, ObjectOutputStream output, ObjectInputStream input) {
+    public RegisterThread(ObjectOutputStream output, ObjectInputStream input) {
         objectInputStream = input;
         objectOutputStream = output;
         t = new Thread(this);
@@ -39,7 +39,7 @@ public class RegisterThread implements Runnable {
             Account newAccount = new Account();
             newAccount.setUsername(message.username);
             newAccount.setEMail(message.email);
-            newAccount.setAvatar("Images/default_avatar.jpg");
+            newAccount.setAvatar("src\\Resources\\avatar_default.png");
             
             boolean result = MyBus.register(newAccount, message.password);
             if(result == true){
