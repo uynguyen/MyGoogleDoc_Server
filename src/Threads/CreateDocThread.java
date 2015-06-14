@@ -36,9 +36,9 @@ public class CreateDocThread implements Runnable {
             //Receive create doc information
             CreateDocPackage message = (CreateDocPackage) objectInputStream.readObject();
 
-            boolean result = MyBus.createNewDocument(message.idOwner, message.title);                        
+            String result = MyBus.createNewDocument(message.idOwner, message.title);                        
 
-            if (result) {
+            if (result != "") {
                 //Create listening port
                 ServerSocket server = new ServerSocket(0);
                 int port = server.getLocalPort();
