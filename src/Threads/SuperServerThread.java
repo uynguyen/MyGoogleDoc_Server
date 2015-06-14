@@ -33,6 +33,8 @@ public class SuperServerThread implements Runnable{
                 
                 System.out.println(client.getPort());
                 
+                HandleLoggedInClientRequestThread handler = new HandleLoggedInClientRequestThread(client);
+                handler.run();
                 
                 
             } while (true);
