@@ -5,6 +5,7 @@
  */
 package mygoogledoc_server;
 
+import Bus.MyBus;
 import DAO.DocumentDAO;
 import Threads.HandleClientRequestThread;
 import Threads.SuperServerThread;
@@ -27,16 +28,17 @@ public class MyGoogleDoc_Server {
         
         
         
-        //DocumentDAO.createNewDocument(4, "TEST");
+      // MyBus.createNewDocument(4, "TEST");
         
         try {
             //Running SuperServerThread
             
             SuperServerThread superServerThread = new SuperServerThread();
-            superServerThread.run();
+            superServerThread.start();
             
             //Host server at port 51399
             ServerSocket server = new ServerSocket(51399);
+              System.out.println("51399");
             Socket client = null;
             do {
                 //Accept a client

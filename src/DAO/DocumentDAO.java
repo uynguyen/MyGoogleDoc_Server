@@ -42,8 +42,8 @@ public class DocumentDAO {
                 Date dateCreate = resultSet.getDate("date_create");
 
                 int IDGroup = resultSet.getInt("id_partners");
-
-                Document doc = new Document(ID, name, path, dateCreate, IDAccount, IDGroup);
+                String code = resultSet.getString("doc_code");
+                Document doc = new Document(ID, name, path, dateCreate, IDAccount, IDGroup, code);
                 result.add(doc);
             }
 
@@ -62,8 +62,8 @@ public class DocumentDAO {
                     String path = resultSet.getString("path");
                     Date dateCreate = resultSet.getDate("date_create");
                     int idOwner = resultSet.getInt("id_owner");
-
-                    Document doc = new Document(ID, name, path, dateCreate, idOwner, IDGroup);
+                    String code = resultSet.getString("doc_code");
+                    Document doc = new Document(ID, name, path, dateCreate, idOwner, IDGroup,code);
                     result.add(doc);
                 }
 
@@ -102,31 +102,35 @@ public class DocumentDAO {
         return false;
     }
 
-    public static boolean createNewDocument(int id_Owner, String title) {
+    public static String createNewDocument(int id_Owner, String title) {
 
         connectionHelper.openConnection();
         try {
             DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             Calendar cal = Calendar.getInstance();
-            String path = "Document\\" + title + cal.getTime().getTime() + ".html";
+            String doc_code = String.valueOf(cal.getTime().getTime());
+            String path = "Document\\" + title + doc_code + ".html";
             File file = new File(path);
 
             boolean result = file.createNewFile();
             if (result) {
 
-                String sql = "INSERT INTO documents(name, path, date_create, id_owner, id_partners)"
-                        + " VALUES ( '" + title + "','" + path + "','" + cal.getTime() + "','" + id_Owner + "','" + "-1" + "')";
-                connectionHelper.excuteNonQuery(sql);
-                return true;
-            } else {
-                return false;
-            }
+                String sql = "INSERT INTO documents(name, path, date_create, id_owner, id_partners, doc_code)"
+                        + " VALUES ( '" + title + "','" + path + "','" + cal.getTime() + "','" + id_Owner + "','" + "-1" + "','" + doc_code +"')";
+                if(connectionHelper.excuteNonQuery(sql))
+                {
+                    return doc_code;
+                }
+
+            } 
+            return "";
+ 
 
         } catch (Exception e) {
 
             connectionHelper.closeConnection();
             e.printStackTrace();
-            return false;
+            return "";
         }
 
     }

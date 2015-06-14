@@ -9,6 +9,7 @@ import DAO.AccountDAO;
 import DAO.DocumentDAO;
 import Pojo.Account;
 import Pojo.Document;
+import Threads.SuperServerThread;
 import java.util.ArrayList;
 
 /**
@@ -29,8 +30,11 @@ public class MyBus {
         return DocumentDAO.getListDocuments(IDAcount);
 
     }
-    public static boolean createNewDocument(int id_Owner, String title )
+    public static String createNewDocument(int id_Owner, String title )
     {
         return DocumentDAO.createNewDocument(id_Owner, title);
     }
+    
+    
+  
 }

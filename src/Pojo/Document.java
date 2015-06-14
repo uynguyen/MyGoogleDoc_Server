@@ -14,13 +14,14 @@ import java.util.Date;
  */
 public class Document implements Serializable{
 
-    public Document(int _ID, String _Name, String _Path, Date _DateCreate, int _IDOwner, int _IDPartners) {
+    public Document(int _ID, String _Name, String _Path, Date _DateCreate, int _IDOwner, int _IDPartners, String code) {
         this._ID = _ID;
         this._Name = _Name;
         this._Path = _Path;
         this._DateCreate = _DateCreate;
         this._IDOwner = _IDOwner;
         this._IDPartners = _IDPartners;
+        this._Code = code;
     }
     
     
@@ -32,7 +33,11 @@ public class Document implements Serializable{
     private Date _DateCreate;
     private int _IDOwner;
     private int _IDPartners;
-
+    private String _Code;
+    
+    
+    
+    
     /**
      * @return the _ID
      */
@@ -115,6 +120,20 @@ public class Document implements Serializable{
      */
     public void setIDPartners(int _IDPartners) {
         this._IDPartners = _IDPartners;
+    }
+
+    /**
+     * @return the _Code
+     */
+    public String getCode() {
+        return _Code;
+    }
+
+    /**
+     * @param _Code the _Code to set
+     */
+    public void setCode(String _Code) {
+        this._Code = _Code;
     }
     
 }

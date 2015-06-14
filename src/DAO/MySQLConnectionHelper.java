@@ -58,6 +58,9 @@ public class MySQLConnectionHelper {
 
             Statement state = con.createStatement();
             state.execute(sql);
+            
+            
+            
             return true;
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -65,36 +68,7 @@ public class MySQLConnectionHelper {
             //Logger.getLogger(MySQLConnectionHelper.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
 
-    public boolean excuteStoreProc(String storeProcName, ArrayList<Object> params) {
-        switch (storeProcName) {
-            case "insertnewcustomer": {
-                CallableStatement cs;
-                try {
-                    cs = con.prepareCall("{call insertnewcustomer(?,?,?,?,?,?,?,?,?,?)}");
 
-                    cs.setString(1, (String) params.get(0));
-                    cs.setBoolean(2, (Boolean) params.get(1));
-                    cs.setString(3, (String) params.get(2));
-                    cs.setString(4, (String) params.get(3));
-                    cs.setString(5, (String) params.get(4));
-                    cs.setString(6, (String) params.get(5));
-                    cs.setString(7, (String) params.get(6));
-                    cs.setString(8, (String) params.get(7));
-                    cs.setInt(9, (int) params.get(8));;
-                    cs.setString(10, (String) params.get(9));
-
-                    cs.execute();
-                    
-
-                } catch (SQLException e) {
-                    System.out.println(e.toString());
-                    return false;
-                }
-
-            }
-
-        }
-        return true;
-    }
 }

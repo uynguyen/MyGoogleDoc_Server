@@ -15,18 +15,13 @@ import java.util.logging.Logger;
  *
  * @author Thanh Tung
  */
-public class SuperServerThread implements Runnable{
+public class SuperServerThread extends Thread{
     
-    Thread t;
-    
-    public SuperServerThread(){
-        t = new Thread(this);
-    }
-
     @Override
     public void run() {
         try {
             ServerSocket server = new ServerSocket(13599);
+            System.out.println("13599");
             Socket client = null;
             do{
                 client = server.accept();
