@@ -7,8 +7,12 @@ package DAO;
 
 import Pojo.Account;
 import Pojo.Document;
+import java.io.File;
 import java.sql.ResultSet;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -96,5 +100,34 @@ public class DocumentDAO {
             return false;
         }
         return false;
+    }
+
+    public static boolean createNewDocument(int id_Owner, String title) {
+
+        connectionHelper.openConnection();
+        try {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            Calendar cal = Calendar.getInstance();
+            String path = "Document\\" + title + cal.getTime().getTime() + ".html";
+            File file = new File(path);
+
+            boolean result = file.createNewFile();
+            if (result) {
+
+                String sql = "INSERT INTO documents(name, path, date_create, id_owner, id_partners)"
+                        + " VALUES ( '" + title + "','" + path + "','" + cal.getTime() + "','" + id_Owner + "','" + "-1" + "')";
+                connectionHelper.excuteNonQuery(sql);
+                return true;
+            } else {
+                return false;
+            }
+
+        } catch (Exception e) {
+
+            connectionHelper.closeConnection();
+            e.printStackTrace();
+            return false;
+        }
+
     }
 }

@@ -5,6 +5,7 @@
  */
 package mygoogledoc_server;
 
+import DAO.DocumentDAO;
 import Threads.HandleClientRequestThread;
 import Threads.SuperServerThread;
 import java.io.IOException;
@@ -23,6 +24,11 @@ public class MyGoogleDoc_Server {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        
+        
+        
+        //DocumentDAO.createNewDocument(4, "TEST");
+        
         try {
             //Running SuperServerThread
             
