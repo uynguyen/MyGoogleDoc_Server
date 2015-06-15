@@ -49,7 +49,7 @@ public class DocumentDAO {
 
             //--------------------
             //-----------Lấy những tài liệu thằng này có tham gia cộng tác
-            strSQL = "select * from documents";
+            strSQL = "select * from documents t where t.id_owner <> '" + IDAccount + "'";
 
             resultSet = connectionHelper.excuteQuery(strSQL);
             while (resultSet.next()) {
@@ -109,7 +109,7 @@ public class DocumentDAO {
             DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             Calendar cal = Calendar.getInstance();
             String doc_code = String.valueOf(cal.getTime().getTime());
-            String path = "Document\\" + title + doc_code + ".html";
+            String path = "Document\\" + title.replace(' ', '_') + doc_code + ".html";
             File file = new File(path);
 
             boolean result = file.createNewFile();
