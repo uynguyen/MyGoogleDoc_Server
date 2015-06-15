@@ -15,13 +15,12 @@ import java.util.logging.Logger;
  *
  * @author Thanh Tung
  */
-public class WorkingServerThread implements Runnable{
-    Thread t;
+public class WorkingServerThread extends Thread{
+    
     ServerSocket server;    
     
     public WorkingServerThread(ServerSocket server){
-        this.server = server;
-        t = new Thread(this);
+        this.server = server;        
     }
 
     @Override
