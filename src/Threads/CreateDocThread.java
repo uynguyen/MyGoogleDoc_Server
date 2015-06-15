@@ -5,6 +5,7 @@
  */
 package Threads;
 
+import Bus.Global;
 import Bus.MyBus;
 import CommunicatePackage.CreateDocPackage;
 import java.io.IOException;
@@ -38,10 +39,12 @@ public class CreateDocThread implements Runnable {
 
             String result = MyBus.createNewDocument(message.idOwner, message.title);                        
 
-            if (result != "") {
+            if (!result.isEmpty()) {
                 //Create listening port
                 ServerSocket server = new ServerSocket(0);
                 int port = server.getLocalPort();
+                
+                Global.documentPort.put(result, port);
 
                 //Create workingThread with this port
                 WorkingServerThread workingServerThread = new WorkingServerThread(server);
@@ -59,9 +62,7 @@ public class CreateDocThread implements Runnable {
             objectOutputStream.flush();
             objectOutputStream.close();
 
-        } catch (IOException ex) {
-            Logger.getLogger(CreateDocThread.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (IOException | ClassNotFoundException ex) {
             Logger.getLogger(CreateDocThread.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
