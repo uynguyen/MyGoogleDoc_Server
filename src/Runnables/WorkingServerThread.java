@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Threads;
+package Runnables;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -15,12 +15,15 @@ import java.util.logging.Logger;
  *
  * @author Thanh Tung
  */
-public class WorkingServerThread extends Thread{
+public class WorkingServerThread implements Runnable{
     
+    Thread t;
     ServerSocket server;    
     
     public WorkingServerThread(ServerSocket server){
         this.server = server;        
+        t = new Thread(this);
+        t.start();
     }
 
     @Override

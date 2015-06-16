@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Threads;
+package Runnables;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -22,7 +22,8 @@ public class HandleClientRequestThread implements Runnable{
 
     public HandleClientRequestThread(Socket client){
         this.client = client;
-        t  = new Thread(this);        
+        t  = new Thread(this);  
+        t.start();
     }
     @Override
     public void run() {
@@ -35,10 +36,8 @@ public class HandleClientRequestThread implements Runnable{
             
             if(flag == true){
                 LogInThread logInThread = new LogInThread(objectOutputStream, objectInputStream);
-                logInThread.run();
             } else {
                 RegisterThread registerThread = new RegisterThread( objectOutputStream, objectInputStream);
-                registerThread.run();
             }
             
         } catch (IOException ex) {

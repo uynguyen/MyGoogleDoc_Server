@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Threads;
+package Runnables;
 
 import Bus.MyBus;
 import CommunicatePackage.RegisterPackage;
@@ -29,6 +29,7 @@ public class RegisterThread implements Runnable {
         objectInputStream = input;
         objectOutputStream = output;
         t = new Thread(this);
+        t.start();
     }
 
     @Override
@@ -53,9 +54,7 @@ public class RegisterThread implements Runnable {
             objectInputStream.close();
             objectOutputStream.close();
             
-        } catch (IOException ex) {
-            Logger.getLogger(LogInThread.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (IOException | ClassNotFoundException ex) {
             Logger.getLogger(RegisterThread.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

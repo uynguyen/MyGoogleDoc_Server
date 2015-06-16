@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Threads;
+package Runnables;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
