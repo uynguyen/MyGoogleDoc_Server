@@ -5,10 +5,13 @@
  */
 package Runnables;
 
+import Bus.Global;
+import CustomComponents.StyledTextEditor;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.AbstractList;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,13 +23,22 @@ import java.util.logging.Logger;
 public class Notifier {
     
     List<ObjectOutputStream> subcribers;
+    StyledTextEditor documentServer = new StyledTextEditor();
+    String document;
     
-    public Notifier(){
+    public Notifier(String docCode){        
+        document = Bus.MyBus.openDocument(docCode);
         subcribers = new ArrayList<ObjectOutputStream>();
     }
     
     public void Register(ObjectOutputStream os){
-        subcribers.add(os);
+        try {
+            subcribers.add(os);
+            os.writeUTF(document);
+            os.flush();
+        } catch (IOException ex) {
+            Logger.getLogger(Notifier.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     synchronized public void NotifyAll(Object message){

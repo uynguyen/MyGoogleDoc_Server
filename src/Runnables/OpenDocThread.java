@@ -34,20 +34,20 @@ public class OpenDocThread implements Runnable{
     public void run() {
         try {
             //Receive doc id to open
-            String docID = (String)objectInputStream.readUTF();
-            System.out.println(docID);
+            String docCode = (String)objectInputStream.readUTF();
+            System.out.println(docCode);
             
-            if(Global.documentPort.containsKey(docID) == false){
+            if(Global.documentPort.containsKey(docCode) == false){
                 //open usable port
                 ServerSocket docSocket = new ServerSocket(0);
                 int port = docSocket.getLocalPort();
                 
                 
                 //add docId and port to hashmap
-                Global.documentPort.put(docID, port);
+                Global.documentPort.put(docCode, port);
                 
                 //listening to clients on another thread
-                WorkingServerThread openServer = new WorkingServerThread(docSocket);
+                WorkingServerThread openServer = new WorkingServerThread(docSocket, docCode);
                                
                 
                 //send port back to client in order to connect
@@ -56,7 +56,7 @@ public class OpenDocThread implements Runnable{
                 objectOutputStream.flush();
             } else {
                 //get port if is working
-                int port = (int)Global.documentPort.get(docID);
+                int port = (int)Global.documentPort.get(docCode);
                 
                 //send port back to client in order to connect
                 System.out.println(port);

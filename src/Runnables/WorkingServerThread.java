@@ -22,11 +22,12 @@ public class WorkingServerThread implements Runnable{
     Thread t;
     ServerSocket server;
     Notifier notifier;
+    String docCode;
     
-    public WorkingServerThread(ServerSocket server){
+    public WorkingServerThread(ServerSocket server, String docCode){
         this.server = server;        
         t = new Thread(this);
-        notifier = new Notifier();
+        notifier = new Notifier(docCode);
         t.start();
     }
 

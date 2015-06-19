@@ -48,7 +48,7 @@ public class CreateDocThread implements Runnable {
                 Global.documentPort.put(result, port);
 
                 //Create workingThread with this port
-                WorkingServerThread workingServerThread = new WorkingServerThread(server);
+                WorkingServerThread workingServerThread = new WorkingServerThread(server, result);
 
                 //Return the working port to client
                 objectOutputStream.writeInt(port);

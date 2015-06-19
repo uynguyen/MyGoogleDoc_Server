@@ -18,25 +18,25 @@ import java.util.ArrayList;
  */
 public class MyBus {
 
-    public static Account checkLoginInfo(String username, String password) {
+    synchronized public static Account checkLoginInfo(String username, String password) {
         return AccountDAO.checkLoginInfo(username, password);
     }
 
-    public static boolean register(Account account, String password) {
+    synchronized public static boolean register(Account account, String password) {
         return AccountDAO.register(account, password);
     }
 
-    public static ArrayList<Document> getListDocument(int IDAcount) {
+    synchronized public static ArrayList<Document> getListDocument(int IDAcount) {
         return DocumentDAO.getListDocuments(IDAcount);
 
     }
-    public static String createNewDocument(int id_Owner, String title )
+    synchronized public static String createNewDocument(int id_Owner, String title )
     {
         return DocumentDAO.createNewDocument(id_Owner, title);
     }
     
     
-     public static String openDocument(String doc_Code){
+    synchronized public static String openDocument(String doc_Code){
       return DocumentDAO.openDocument(doc_Code);
       
   }
