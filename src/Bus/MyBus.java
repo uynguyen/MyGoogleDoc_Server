@@ -101,4 +101,6 @@ public class MyBus {
         return CollaborationDAO.shareDocument(doc_code,id_sender,id_receiver);
     }
 
+    
+    
 }
