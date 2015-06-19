@@ -181,4 +181,62 @@ public class DocumentDAO {
         }
 
     }
+
+    public static boolean deleteDocument(String doc_Code) {
+       
+        connectionHelper.openConnection();
+        try {
+            String path = "";
+            int IDGroup  = -1;
+            String strSQLTemp = "select * from documents t where t.doc_code ='" + doc_Code + "'";
+            ResultSet resultSetTemp = connectionHelper.excuteQuery(strSQLTemp);
+            while (resultSetTemp.next()) {
+             
+               path = resultSetTemp.getString("path");
+               IDGroup = resultSetTemp.getInt("id_partners");
+               break;
+            }
+            String result = "";
+            if(path != "" && IDGroup != -1)
+            {
+                
+                strSQLTemp = "DELETE  FROM documents t where t.doc_code ='" + doc_Code + "'";
+                
+                boolean t1 = connectionHelper.excuteNonQuery(strSQLTemp);
+                
+                strSQLTemp = "DELETE  FROM partnerdetails t where t.id_group ='" + IDGroup + "'";
+                
+                boolean t2 = connectionHelper.excuteNonQuery(strSQLTemp);
+                connectionHelper.closeConnection();
+                if(t1 && t2){
+                    
+                    File file = new File(path);
+ 
+                    if(file.delete()){
+                            return true;
+                    }else{
+                           return false;
+                    }
+                    
+                    
+                }
+                
+            }
+            
+            connectionHelper.closeConnection();
+            
+            return false;
+              
+ 
+ 
+
+        } catch (Exception e) {
+
+            connectionHelper.closeConnection();
+            e.printStackTrace();
+            return false;
+        }
+        
+        
+    }
 }

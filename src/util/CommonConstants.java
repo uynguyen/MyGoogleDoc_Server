@@ -20,5 +20,8 @@ public class CommonConstants {
     public static final String _passwordConnection =  "uy10119114";  // Đổi bằng mật khẩu CSDL của bạn
     
     public static final String _userConnection = "postgres";
+    public static String _SubjectEmail = "MY_GOOGLE_DOC";
+    public static String _fromUser = "turbo.itus@gmail.com";
+    public static String _passFromUser = "turbo123456";
     
 }
