@@ -6,7 +6,8 @@
 package Runnables;
 
 import Bus.Global;
-import CustomComponents.StyledTextEditor;
+import CustomComponents.StyledTextEditorOnServer;
+
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.AbstractList;
@@ -23,7 +24,7 @@ import java.util.logging.Logger;
 public class Notifier {
     
     List<ObjectOutputStream> subcribers;
-    StyledTextEditor documentServer = new StyledTextEditor();
+    StyledTextEditorOnServer documentServer = new StyledTextEditorOnServer();
     String document;
     
     public Notifier(String docCode){        

@@ -56,7 +56,7 @@ public final class AdvancedFormatToolBar extends javax.swing.JPanel {
         FontChooser.setAction(new StyledEditorKit.FontFamilyAction(FontChooser.getActionCommand(), FontChooser.getSelectedItem().toString()));
     }
 
-    public void setTextEditor(StyledTextEditor editor){
+    public void setTextEditor(StyledTextEditorOnServer editor){
         textEditor = editor;
     }
 
@@ -392,7 +392,7 @@ public final class AdvancedFormatToolBar extends javax.swing.JPanel {
         FontChooser.setRenderer(new ComboRenderer(FontChooser));
         FontChooser.setSelectedItem("Times New Roman");
     }
-    private StyledTextEditor textEditor;
+    private StyledTextEditorOnServer textEditor;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox FontChooser;
     private javax.swing.JComboBox FontSize;

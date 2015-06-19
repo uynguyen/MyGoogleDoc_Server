@@ -50,9 +50,9 @@ import javax.swing.text.rtf.RTFEditorKit;
  *
  * @author Vin
  */
-public final class StyledTextEditor extends javax.swing.JPanel {
+public final class StyledTextEditorOnServer extends javax.swing.JPanel {
 
-   final long  MAX_CHARACTERS = Long.MAX_VALUE;
+    final long MAX_CHARACTERS = Long.MAX_VALUE;
     Color forcegroundColor = Color.black;
     public File currentFile = null;
     String newline = "\n";
@@ -63,41 +63,35 @@ public final class StyledTextEditor extends javax.swing.JPanel {
     /**
      * Creates new form StyledTextEditor
      */
-    public StyledTextEditor() {
+    public StyledTextEditorOnServer() {
         initComponents();
         //   timer.stop();
-       
 
         textPane.setCaretPosition(0);
         textPane.setMargin(new Insets(50, 50, 50, 50));
-    
+
         actions = createActionTable(textPane);
         //Add some key bindings.
         addBindings();
 
         //Start watching for undoable edits and caret changes.
-        textPane.getStyledDocument().addUndoableEditListener(FormatToolbar.getUndoableEditLitener());
-
-        textPane.getStyledDocument().addDocumentListener(new StyledTextEditor.MyDocumentListener());
-        FormatToolbar.setTextEditor(this);
-        
+        //  textPane.getStyledDocument().addUndoableEditListener();
         NewDocument();
 
     }
 
-    public void ApplyAttributeSet(SimpleAttributeSet as){
-      
+    public void ApplyAttributeSet(SimpleAttributeSet as) {
+
     }
-    
-    
+
     public void NewDocument() {
         textPane.setEditorKit(new AdvancedHTMLEditorKit());
         textPane.setContentType(textPane.getEditorKit().getContentType());
         textPane.setDocument(textPane.getEditorKit().createDefaultDocument());
         //Put the initial text into the text pane.
-      //   initDocument();
-        textPane.setCaretPosition(0);  
-       
+        //   initDocument();
+        textPane.setCaretPosition(0);
+        textPane.getStyledDocument().addDocumentListener(new MyDocumentListener());
     }
 
     private void addChooseFileFilters(JFileChooser chooser) {
@@ -128,11 +122,9 @@ public final class StyledTextEditor extends javax.swing.JPanel {
 
             }
         }
-       
+
     }
 
-    
-    
 //    public void addCaret(int pos, Color cl) {
 //        Caret caret = new DefaultCaret();
 //       // caret.setBlinkRate(300);
@@ -148,7 +140,6 @@ public final class StyledTextEditor extends javax.swing.JPanel {
 //        });
 //       
 //    }
-
     public void OpenDocument() {
         //addCaret(10, Color.BLUE);
         JFileChooser chooser = new JFileChooser();
@@ -168,8 +159,8 @@ public final class StyledTextEditor extends javax.swing.JPanel {
                 } else {
                     setRTFString(content);
                 }
-                textPane.getStyledDocument().addUndoableEditListener(FormatToolbar.getUndoableEditLitener());
-                textPane.getStyledDocument().addDocumentListener(new MyDocumentListener());
+//                textPane.getStyledDocument().addUndoableEditListener(FormatToolbar.getUndoableEditLitener());
+                //               textPane.getStyledDocument().addDocumentListener(new MyDocumentListener());
             } catch (IOException ex) {
 
             }
@@ -224,19 +215,15 @@ public final class StyledTextEditor extends javax.swing.JPanel {
                 Files.write(currentFile.toPath(), getRTFString().getBytes());
             }
         } catch (IOException ex) {
-            Logger.getLogger(StyledTextEditor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(StyledTextEditorOnServer.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
 
-    
-    public JTextPane getJTextPane(){
+    public JTextPane getJTextPane() {
         return textPane;
     }
-    
-    
-    
-  
+
     public void SaveAsDocument() {
         JFileChooser chooser = new JFileChooser();
         chooser.setMultiSelectionEnabled(false);
@@ -244,7 +231,7 @@ public final class StyledTextEditor extends javax.swing.JPanel {
         chooser.setAcceptAllFileFilterUsed(false);
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         chooser.setMultiSelectionEnabled(false);
-        
+
         try {
             if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
                 currentFile = chooser.getSelectedFile();
@@ -267,9 +254,9 @@ public final class StyledTextEditor extends javax.swing.JPanel {
         @Override
         public void caretUpdate(CaretEvent e) {
             displaySelectionInfo(e.getDot(), e.getMark());
-            
+
           //  drawCaret();
-           //  textPane.setCaret(defaultCaret);
+            //  textPane.setCaret(defaultCaret);
         }
 
         //This method can be invoked from any thread.  It 
@@ -413,12 +400,12 @@ public final class StyledTextEditor extends javax.swing.JPanel {
         HTMLEditorKit kit = new AdvancedHTMLEditorKit();
         textPane.setEditorKit(kit);
         textPane.setDocument(kit.createDefaultDocument());
-       // textPane.setCaret(kit.createCaret());
+        // textPane.setCaret(kit.createCaret());
 
         textPane.setText(src);
-        textPane.getStyledDocument().addUndoableEditListener(FormatToolbar.getUndoableEditLitener());
+//        textPane.getStyledDocument().addUndoableEditListener(FormatToolbar.getUndoableEditLitener());
         textPane.getStyledDocument().addDocumentListener(new MyDocumentListener());
-      //  textPane.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+        //  textPane.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
     }
 
     public String getRTFString() {
@@ -439,9 +426,9 @@ public final class StyledTextEditor extends javax.swing.JPanel {
         textPane.setEditorKit(kit);
         textPane.setDocument(kit.createDefaultDocument());
         textPane.setText(src);
-        textPane.getStyledDocument().addUndoableEditListener(FormatToolbar.getUndoableEditLitener());
+//        textPane.getStyledDocument().addUndoableEditListener(FormatToolbar.getUndoableEditLitener());
         textPane.getStyledDocument().addDocumentListener(new MyDocumentListener());
-      //  textPane.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+        //  textPane.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
     }
 
     protected void initDocument() {
@@ -515,16 +502,13 @@ public final class StyledTextEditor extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPopupMenu1 = new javax.swing.JPopupMenu();
         jScrollPane1 = new javax.swing.JScrollPane();
         textPane = new javax.swing.JTextPane();
-        FormatToolbar = new CustomComponents.AdvancedFormatToolBar();
 
-        jPopupMenu1.setLabel("popup");
+        setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 102), 2, true));
 
         textPane.setContentType("text/html"); // NOI18N
         textPane.setAutoscrolls(false);
-        textPane.setComponentPopupMenu(jPopupMenu1);
         textPane.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         textPane.setMaximumSize(jScrollPane1.getPreferredSize());
         textPane.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
@@ -542,44 +526,26 @@ public final class StyledTextEditor extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(textPane);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(FormatToolbar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 658, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(103, 103, 103)
-                .addComponent(jScrollPane1)
-                .addGap(137, 137, 137))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(FormatToolbar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE))
-        );
+        add(jScrollPane1);
     }// </editor-fold>//GEN-END:initComponents
 
     private void textPaneMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_textPaneMouseMoved
         // TODO add your handling code here:
-       
+
     }//GEN-LAST:event_textPaneMouseMoved
 
     private void textPaneMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_textPaneMouseEntered
         // TODO add your handling code here:
-         setCursor(new Cursor(Cursor.TEXT_CURSOR));
+        setCursor(new Cursor(Cursor.TEXT_CURSOR));
     }//GEN-LAST:event_textPaneMouseEntered
 
     private void textPaneMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_textPaneMouseExited
         // TODO add your handling code here:
-         setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_textPaneMouseExited
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private CustomComponents.AdvancedFormatToolBar FormatToolbar;
-    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextPane textPane;
     // End of variables declaration//GEN-END:variables
