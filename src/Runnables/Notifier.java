@@ -20,20 +20,24 @@ import java.util.logging.Logger;
  * @author ThanhTung
  */
 public class Notifier {
-    
+
     List<ObjectOutputStream> subcribers;
     StyledTextEditorOnServer documentServer = new StyledTextEditorOnServer();
     String document;
     StyledTextEditorOnServer textEditor;
-    
-    public Notifier(String docCode, StyledTextEditorOnServer editor){        
+
+    public Notifier(String docCode, StyledTextEditorOnServer editor) {
         textEditor = editor;
         document = Bus.MyBus.openDocument(docCode);
         textEditor.setHTMLString(document);
         subcribers = new ArrayList<ObjectOutputStream>();
     }
-    
-    public void Register(ObjectOutputStream os){
+
+    public int GetNumber() {
+        return subcribers.size() - 1;
+    }
+
+    public void Register(ObjectOutputStream os) {
         try {
             subcribers.add(os);
             os.writeUTF(textEditor.getHTMLString());
@@ -42,15 +46,17 @@ public class Notifier {
             Logger.getLogger(Notifier.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    synchronized public void NotifyAll(Object message){
-        for(int i = 0; i < subcribers.size(); i ++){
-            try {
-                ObjectOutputStream os = subcribers.get(i);
-                os.writeObject(message);
-                os.flush();
-            } catch (IOException ex) {
-                Logger.getLogger(Notifier.class.getName()).log(Level.SEVERE, null, ex);
+
+    synchronized public void NotifyAll(Object message, int sender) {
+        for (int i = 0; i < subcribers.size(); i++) {
+            if (i != sender) {
+                try {
+                    ObjectOutputStream os = subcribers.get(i);
+                    os.writeObject(message);
+                    os.flush();
+                } catch (IOException ex) {
+                    Logger.getLogger(Notifier.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
     }

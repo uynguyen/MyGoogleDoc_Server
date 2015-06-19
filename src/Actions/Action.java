@@ -5,6 +5,7 @@
  */
 package Actions;
 
+import java.io.Serializable;
 import javax.swing.JTextPane;
 import javax.swing.text.AttributeSet;
 
@@ -12,7 +13,7 @@ import javax.swing.text.AttributeSet;
  *
  * @author UyNguyen.ITUS
  */
-public abstract class Action {
+public abstract class Action implements Serializable{
     protected int _startPosition;
     protected int _endPosition;
       protected AttributeSet _attributeset;
