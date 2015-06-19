@@ -6,6 +6,7 @@
 package Runnables;
 
 import Actions.Action;
+import CustomComponents.StyledTextEditorOnServer;
 import Pojo.Account;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -24,10 +25,13 @@ public class ClientReceiveThread implements Runnable{
     Notifier notifier;
     Account clientInfo;
     Stack<Action> actionStack;
+    StyledTextEditorOnServer textEditor;
+    int threadNumber;
     
-    public ClientReceiveThread(ObjectInputStream is, Notifier notifier){
+    public ClientReceiveThread(ObjectInputStream is, Notifier notifier, StyledTextEditorOnServer steos, int threadNumber){
         objectInputStream = is;        
         this.notifier = notifier;
+        this.textEditor = steos;
         actionStack = new Stack<>();
         t = new Thread(this);
         t.start();
@@ -43,6 +47,12 @@ public class ClientReceiveThread implements Runnable{
             //receive action
             while (true)
             {
+                Action action = (Action)objectInputStream.readObject();
+                
+                action.onDraw(textEditor.getJTextPane());
+                
+                notifier.NotifyAll(action, threadNumber);
+                
             }
         } catch (IOException ex) {
             Logger.getLogger(ClientReceiveThread.class.getName()).log(Level.SEVERE, null, ex);
