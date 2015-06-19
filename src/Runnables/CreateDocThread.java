@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Threads;
+package Runnables;
 
 import Bus.Global;
 import Bus.MyBus;
@@ -29,6 +29,7 @@ public class CreateDocThread implements Runnable {
         this.objectInputStream = input;
         this.objectOutputStream = output;
         t = new Thread(this);
+        t.start();
     }
 
     @Override
@@ -48,7 +49,6 @@ public class CreateDocThread implements Runnable {
 
                 //Create workingThread with this port
                 WorkingServerThread workingServerThread = new WorkingServerThread(server);
-                workingServerThread.start();
 
                 //Return the working port to client
                 objectOutputStream.writeInt(port);

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Threads;
+package Runnables;
 
 import Pojo.EnumUserAction;
 import java.io.IOException;
@@ -24,6 +24,7 @@ public class HandleLoggedInClientRequestThread implements Runnable{
     public HandleLoggedInClientRequestThread(Socket client){
         this.client = client;
         t  = new Thread(this);
+        t.start();
     }
     
     @Override
@@ -37,10 +38,9 @@ public class HandleLoggedInClientRequestThread implements Runnable{
             int flag = objectInputStream.readInt();
             
             if(flag == EnumUserAction.CREATEDOC.getValue()){
-                CreateDocThread createDocThread = new CreateDocThread(objectOutputStream, objectInputStream);
-                createDocThread.run();
+                CreateDocThread createDocThread = new CreateDocThread(objectOutputStream, objectInputStream);                
             } else {
-                
+                OpenDocThread openDocThread = new OpenDocThread(objectOutputStream, objectInputStream);
             }
             
         } catch (IOException ex) {

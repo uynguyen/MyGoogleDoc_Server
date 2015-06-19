@@ -7,8 +7,8 @@ package mygoogledoc_server;
 
 import Bus.MyBus;
 import DAO.DocumentDAO;
-import Threads.HandleClientRequestThread;
-import Threads.SuperServerThread;
+import Runnables.HandleClientRequestThread;
+import Runnables.SuperServerThread;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -35,7 +35,6 @@ public class MyGoogleDoc_Server {
             //Running SuperServerThread
             
             SuperServerThread superServerThread = new SuperServerThread();
-            superServerThread.start();
             
             //Host server at port 51399
             ServerSocket server = new ServerSocket(51399);
@@ -48,7 +47,10 @@ public class MyGoogleDoc_Server {
                 System.out.println(client.getPort());
                 
                 HandleClientRequestThread handle = new HandleClientRequestThread(client);
+<<<<<<< HEAD
                // handle.run();
+=======
+>>>>>>> aca5e53122a1d41620f6d476c6e49c38cf33cf3f
 
             } while (true);
         } catch (IOException ex) {
