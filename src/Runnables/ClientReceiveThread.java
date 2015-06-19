@@ -5,7 +5,13 @@
  */
 package Runnables;
 
+import Actions.Action;
+import Pojo.Account;
+import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.Stack;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -16,16 +22,33 @@ public class ClientReceiveThread implements Runnable{
     Thread t;
     ObjectInputStream objectInputStream;
     Notifier notifier;
+    Account clientInfo;
+    Stack<Action> actionStack;
     
     public ClientReceiveThread(ObjectInputStream is, Notifier notifier){
         objectInputStream = is;        
         this.notifier = notifier;
+        actionStack = new Stack<>();
         t = new Thread(this);
         t.start();
     }
 
     @Override
     public void run() {
+        try {
+            //receive client information
+            clientInfo = (Account)objectInputStream.readObject();
+            System.out.println(clientInfo.getID() + ": " + clientInfo.getUsername());
+            
+            //receive action
+            while (true)
+            {
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(ClientReceiveThread.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ClientReceiveThread.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }
     

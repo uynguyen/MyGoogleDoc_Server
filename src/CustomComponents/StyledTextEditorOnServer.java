@@ -379,7 +379,7 @@ public final class StyledTextEditorOnServer extends javax.swing.JPanel {
         inputMap.put(key, new StyledEditorKit.UnderlineAction());
     }
 
-    public String getHTMLString() {
+    synchronized public String getHTMLString() {
         String strResult = "";
         try {
             HTMLEditorKit kit = new HTMLEditorKit();
@@ -396,7 +396,7 @@ public final class StyledTextEditorOnServer extends javax.swing.JPanel {
         return "";
     }
 
-    public void setHTMLString(String src) {
+    synchronized public void setHTMLString(String src) {
         HTMLEditorKit kit = new AdvancedHTMLEditorKit();
         textPane.setEditorKit(kit);
         textPane.setDocument(kit.createDefaultDocument());
