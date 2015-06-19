@@ -5,6 +5,7 @@
  */
 package Runnables;
 
+import CustomComponents.StyledTextEditorOnServer;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -23,11 +24,13 @@ public class WorkingServerThread implements Runnable{
     ServerSocket server;
     Notifier notifier;
     String docCode;
+    StyledTextEditorOnServer textEditor;
     
     public WorkingServerThread(ServerSocket server, String docCode){
         this.server = server;        
+        textEditor = new StyledTextEditorOnServer();
+        notifier = new Notifier(docCode, textEditor);
         t = new Thread(this);
-        notifier = new Notifier(docCode);
         t.start();
     }
 

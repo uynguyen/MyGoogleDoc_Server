@@ -10,9 +10,7 @@ import CustomComponents.StyledTextEditorOnServer;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.util.AbstractList;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,16 +24,19 @@ public class Notifier {
     List<ObjectOutputStream> subcribers;
     StyledTextEditorOnServer documentServer = new StyledTextEditorOnServer();
     String document;
+    StyledTextEditorOnServer textEditor;
     
-    public Notifier(String docCode){        
+    public Notifier(String docCode, StyledTextEditorOnServer editor){        
+        textEditor = editor;
         document = Bus.MyBus.openDocument(docCode);
+        textEditor.setHTMLString(document);
         subcribers = new ArrayList<ObjectOutputStream>();
     }
     
     public void Register(ObjectOutputStream os){
         try {
             subcribers.add(os);
-            os.writeUTF(document);
+            os.writeUTF(textEditor.getHTMLString());
             os.flush();
         } catch (IOException ex) {
             Logger.getLogger(Notifier.class.getName()).log(Level.SEVERE, null, ex);
