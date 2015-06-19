@@ -28,6 +28,7 @@ public class MyGoogleDoc_Server {
         
         
         
+        
       // MyBus.createNewDocument(4, "TEST");
         
         try {
@@ -47,7 +48,7 @@ public class MyGoogleDoc_Server {
                 System.out.println(client.getPort());
                 
                 HandleClientRequestThread handle = new HandleClientRequestThread(client);
-                handle.run();
+               // handle.run();
 
             } while (true);
         } catch (IOException ex) {
