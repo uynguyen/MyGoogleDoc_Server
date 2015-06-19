@@ -7,7 +7,10 @@ package DAO;
 
 import Pojo.Account;
 import Pojo.Document;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.sql.ResultSet;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -124,6 +127,50 @@ public class DocumentDAO {
 
             } 
             return "";
+ 
+
+        } catch (Exception e) {
+
+            connectionHelper.closeConnection();
+            e.printStackTrace();
+            return "";
+        }
+
+    }
+    
+    public static String openDocument(String doc_Code){
+        
+        connectionHelper.openConnection();
+        try {
+            String path = "";
+            String strSQLTemp = "select * from documents t where t.doc_code ='" + doc_Code + "'";
+            ResultSet resultSetTemp = connectionHelper.excuteQuery(strSQLTemp);
+            while (resultSetTemp.next()) {
+               connectionHelper.closeConnection();
+               path = resultSetTemp.getString("path");
+               break;
+            }
+            String result = "";
+            if(path != "")
+            {
+                
+                
+                FileReader fr = new FileReader(path);
+                BufferedReader br = new BufferedReader(fr);
+                
+                String aline;
+                while( (aline = br.readLine()) != null  ){
+                    result += aline;
+                }
+               
+                br.close();
+            }
+            
+            
+            
+            return result;
+              
+ 
  
 
         } catch (Exception e) {
