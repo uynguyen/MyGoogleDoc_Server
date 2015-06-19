@@ -7,6 +7,8 @@ package DAO;
 
 import Pojo.Account;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -26,13 +28,12 @@ public class AccountDAO {
             ResultSet resultSet = connectionHelper.excuteQuery(strSQL);
             while (resultSet.next()) {
 
-                    int ID = resultSet.getInt("id");
+                int ID = resultSet.getInt("id");
 
-                    String email = resultSet.getString("email");
-                    String avatar = resultSet.getString("avatar");
+                String email = resultSet.getString("email");
+                String avatar = resultSet.getString("avatar");
 
-                    result = new Account(ID, username, avatar, email);
-                
+                result = new Account(ID, username, avatar, email);
 
             }
 
@@ -86,6 +87,68 @@ public class AccountDAO {
         } else {
             return false;
         }
+
+    }
+
+    public static Boolean renewPass(String username, String password) {
+        try {
+            connectionHelper.openConnection();
+
+            String strSQL = "update accounts set password=md5('" + password + "') where username = '" + username + "'";
+            connectionHelper.excuteNonQuery(strSQL);
+
+            connectionHelper.closeConnection();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public static ArrayList<String> getAllCusUserName() {
+        connectionHelper.openConnection();
+        ArrayList<String> result = new ArrayList<>();
+        try {
+
+            String strSQL = "select acc.username from accounts acc";
+
+            ResultSet resultSet = connectionHelper.excuteQuery(strSQL);
+            while (resultSet.next()) {
+                String userName = resultSet.getString("username");
+
+                result.add(userName);
+            }
+
+        } catch (SQLException ex) {
+
+        }
+        connectionHelper.closeConnection();
+        return result;
+    }
+
+    public static String findEmailAddress(String username) {
+        try {
+            connectionHelper.openConnection();
+
+            String strSQL = "SELECT * FROM accounts WHERE username='" + username + "'";
+
+            ResultSet resultSet = connectionHelper.excuteQuery(strSQL);
+            while (resultSet.next()) {
+                String email = resultSet.getString("email");
+                connectionHelper.closeConnection();
+                return email;
+            }
+
+        } catch (Exception e) {
+            connectionHelper.closeConnection();
+            return "";
+        }
+        connectionHelper.closeConnection();
+        return "success";
+    }
+
+    public static boolean updatePassword(String username, String newPassword) {
+
+        return renewPass(username, newPassword);
 
     }
 
