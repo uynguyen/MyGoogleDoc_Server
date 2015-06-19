@@ -28,29 +28,33 @@ public class MyGoogleDoc_Server {
         
         
         
-      // MyBus.createNewDocument(4, "TEST");
         
-        try {
-            //Running SuperServerThread
-            
-            SuperServerThread superServerThread = new SuperServerThread();
-            
-            //Host server at port 51399
-            ServerSocket server = new ServerSocket(51399);
-              System.out.println("51399");
-            Socket client = null;
-            do {
-                //Accept a client
-                client = server.accept();
-                
-                System.out.println(client.getPort());
-                
-                HandleClientRequestThread handle = new HandleClientRequestThread(client);
-
-            } while (true);
-        } catch (IOException ex) {
-            Logger.getLogger(MyGoogleDoc_Server.class.getName()).log(Level.SEVERE, null, ex);
-        }
+       MyBus.openDocument("1434690635144");
+        
+//        try {
+//            //Running SuperServerThread
+//            
+//            SuperServerThread superServerThread = new SuperServerThread();
+//            
+//            //Host server at port 51399
+//            ServerSocket server = new ServerSocket(51399);
+//              System.out.println("51399");
+//            Socket client = null;
+//            do {
+//                //Accept a client
+//                client = server.accept();
+//                
+//                System.out.println(client.getPort());
+//                
+//                HandleClientRequestThread handle = new HandleClientRequestThread(client);
+//
+//             //   handle.run();
+//
+//
+//            } while (true);
+//        } catch (IOException ex) {
+//            Logger.getLogger(MyGoogleDoc_Server.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
 
 }

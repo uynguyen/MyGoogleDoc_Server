@@ -22,7 +22,8 @@ public class HandleClientRequestThread implements Runnable{
 
     public HandleClientRequestThread(Socket client){
         this.client = client;
-        t  = new Thread(this);  
+
+        t  = new Thread(this);    
         t.start();
     }
     @Override

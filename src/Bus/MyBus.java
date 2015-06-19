@@ -36,5 +36,8 @@ public class MyBus {
     }
     
     
-  
+     public static String openDocument(String doc_Code){
+      return DocumentDAO.openDocument(doc_Code);
+      
+  }
 }
