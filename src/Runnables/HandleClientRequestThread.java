@@ -5,6 +5,7 @@
  */
 package Runnables;
 
+import Pojo.EnumUserAction;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -33,12 +34,14 @@ public class HandleClientRequestThread implements Runnable{
             objectOutputStream.flush();
             ObjectInputStream objectInputStream = new ObjectInputStream(client.getInputStream());
             
-            boolean flag = objectInputStream.readBoolean();
+            int flag = objectInputStream.readInt();
             
-            if(flag == true){
+            if(flag == EnumUserAction.LOGIN.getValue()){
                 LogInThread logInThread = new LogInThread(objectOutputStream, objectInputStream);
-            } else {
+            } else if (flag == EnumUserAction.REGISTER.getValue()){
                 RegisterThread registerThread = new RegisterThread( objectOutputStream, objectInputStream);
+            } else {
+                ResetPasswordThread resetPasswordThread = new ResetPasswordThread(objectOutputStream, objectInputStream);
             }
             
         } catch (IOException ex) {
