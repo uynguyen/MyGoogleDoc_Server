@@ -50,14 +50,12 @@ public class ClientReceiveThread implements Runnable{
             {
                 Action action = (Action)objectInputStream.readObject();
                 
-                textEditor.ApplyActionChange(action);
+               textEditor.ApplyActionChange(action);
                 
                 notifier.NotifyAll(action, threadNumber);
                 
             }
-        } catch (IOException ex) {
-            Logger.getLogger(ClientReceiveThread.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (IOException | ClassNotFoundException ex) {
             Logger.getLogger(ClientReceiveThread.class.getName()).log(Level.SEVERE, null, ex);
         }
         
