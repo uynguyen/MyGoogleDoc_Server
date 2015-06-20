@@ -15,7 +15,7 @@ import javax.swing.text.BadLocationException;
  *
  * @author UyNguyen.ITUS
  */
-public class ActionDelete extends Action{
+public class ActionDelete extends Action {
 
     public ActionDelete(AttributeSet attributeset) {
         super(attributeset);
@@ -24,18 +24,15 @@ public class ActionDelete extends Action{
     
     @Override
     public void onDraw(JTextPane textPane) {
+        System.err.println("Delete: " + _startPosition + "->" + _endPosition);
         try {
-            textPane.getDocument().remove(_startPosition, _endPosition  - _startPosition);
-             int currentPos = textPane.getCaretPosition();
-            if(_startPosition < currentPos){
-                int newPos = currentPos - (_endPosition  - _startPosition);
-                newPos = (newPos < 0)? 0 : newPos;
-                textPane.setCaretPosition(newPos);
-            }
+            textPane.getStyledDocument().remove(_startPosition, _endPosition  - _startPosition);
             textPane.validate();
         } catch (BadLocationException ex) {
             Logger.getLogger(ActionDelete.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-    
+    }   
 }
+
+
+

@@ -29,21 +29,11 @@ public class ActionFormat extends Action {
 
     @Override
 
-    public void onDraw(JTextPane textPane) {
-        
-    
+    public void onDraw(JTextPane textPane) {     
+        System.err.println("Format: " + _startPosition + "->" + _endPosition);
         textPane.getStyledDocument().setCharacterAttributes(_startPosition, _endPosition - _startPosition, _attributeset, false);
-                
-//        String content;
-//        try {
-//            content = textPane.getDocument().getText(_startPosition, _endPosition - _startPosition);
-//            textPane.getDocument().remove(_startPosition, _endPosition - _startPosition);
-//            textPane.getDocument().insertString(_startPosition, content, _attributeset);
-//        } catch (BadLocationException ex) {
-//            Logger.getLogger(ActionFormat.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-
     }
+
 
     /**
      * @return the _action

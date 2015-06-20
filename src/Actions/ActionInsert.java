@@ -28,16 +28,9 @@ public class ActionInsert extends Action{
     
     @Override
     public void onDraw(JTextPane textPane) {
-        try {
-            
-            textPane.getDocument().insertString(_startPosition, getContent(), _attributeset);
-            int currentPos = textPane.getCaretPosition();
-            if(_startPosition < currentPos){
-                int newPos = currentPos + _Content.length();
-                newPos = (newPos > textPane.getStyledDocument().getEndPosition().getOffset())? 
-                        textPane.getStyledDocument().getEndPosition().getOffset(): newPos;
-                textPane.setCaretPosition(newPos);
-            }
+        System.err.println("Insert: " + _startPosition + "=" + _Content + "[" + _Content.length() + "]");
+        try {           
+            textPane.getDocument().insertString(_startPosition, getContent(), _attributeset);          
         } catch (BadLocationException ex) {
             Logger.getLogger(ActionInsert.class.getName()).log(Level.SEVERE, null, ex);
         }

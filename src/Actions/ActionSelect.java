@@ -16,13 +16,13 @@ public class ActionSelect extends Action{
 
     public ActionSelect(AttributeSet attributeset) {
         super(attributeset);
-    }
-    
-   
+    }  
     
     @Override
     public void onDraw(JTextPane textPane) {
-        textPane.getStyledDocument().setCharacterAttributes(_startPosition, _endPosition - _startPosition, _attributeset, false);
+       System.err.println("Select: " + _startPosition + "->" + _endPosition);
+       textPane.setSelectionStart(_startPosition);
+       textPane.setSelectionEnd(_endPosition);
     }
     
 }
