@@ -48,8 +48,10 @@ public class ClientReceiveThread implements Runnable {
             //receive action
             while (true) {
                 try {
-                    Actions.Action action = (Actions.Action) objectInputStream.readObject();
+                    Object o = objectInputStream.readObject();
+                    
                     System.out.println("Action is ok!");
+                    Actions.Action action = (Actions.Action)o;
                     textEditor.ApplyActionChange(action);
                     System.out.println("Apply is done!");
                     notifier.NotifyAll(action, threadNumber);
