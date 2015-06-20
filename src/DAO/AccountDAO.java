@@ -152,4 +152,28 @@ public class AccountDAO {
 
     }
 
+    static String getUsernameByID(int id_sender) {
+        
+        try {
+            connectionHelper.openConnection();
+            String strSQL = "select * from accounts acc where acc.id = '" + id_sender + "'";
+
+            ResultSet resultSet = connectionHelper.excuteQuery(strSQL);
+            while (resultSet.next()) {
+                
+                String result = resultSet.getString("username");
+                connectionHelper.closeConnection();
+                return result;
+
+            }
+
+        } catch (Exception e) {
+            connectionHelper.closeConnection();
+            return "-1";
+        }
+        connectionHelper.closeConnection();
+        return "0";
+        
+    }
+
 }

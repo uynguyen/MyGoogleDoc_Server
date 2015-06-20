@@ -8,8 +8,11 @@ package Bus;
 import DAO.AccountDAO;
 import DAO.CollaborationDAO;
 import DAO.DocumentDAO;
+import DAO.InviteDAO;
+import DAO.PartnerDetailsDAO;
 import Pojo.Account;
 import Pojo.Document;
+import Pojo.Invite;
 import Runnables.SuperServerThread;
 import java.util.ArrayList;
 import java.util.Random;
@@ -96,11 +99,26 @@ public class MyBus {
 
     }
     
+    public static Boolean leaveDocument(int id_acc, String doc_Code){
+        
+        int id_Group = DocumentDAO.getGroupDocument(doc_Code);
+        if(id_Group != -1){
+           
+            return PartnerDetailsDAO.removeMember(id_acc, id_Group, doc_Code);
+            
+        }
+        return false;
+        
+    }
+    
     public static Boolean shareDocument(String doc_code, int id_sender, int id_receiver){
         
         return CollaborationDAO.shareDocument(doc_code,id_sender,id_receiver);
     }
 
+    public static ArrayList<Invite> getMyInvite(int id_acc){
+      return InviteDAO.getMyInvite(id_acc);
+    }
     
     
 }

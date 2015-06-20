@@ -59,7 +59,7 @@ public class DocumentDAO {
 
                 int IDGroup = resultSet.getInt("id_partners");
 
-                if (checkBelongGroup(IDGroup, IDAccount)) {
+                if (IDGroup != -1 && checkBelongGroup(IDGroup, IDAccount)) {
                     int ID = resultSet.getInt("id");
                     String name = resultSet.getString("name");
                     String path = resultSet.getString("path");
@@ -207,8 +207,14 @@ public class DocumentDAO {
                 strSQLTemp = "DELETE  FROM partnerdetails t where t.id_group ='" + IDGroup + "'";
                 
                 boolean t2 = connectionHelper.excuteNonQuery(strSQLTemp);
+                
+                
+                strSQLTemp = "DELETE  FROM collaboration t where t.doc_code ='" + doc_Code + "'";
+                
+                boolean t3 = connectionHelper.excuteNonQuery(strSQLTemp);
+                
                 connectionHelper.closeConnection();
-                if(t1 && t2){
+                if(t1 && t2 && t3){
                     
                     File file = new File(path);
  
@@ -238,5 +244,41 @@ public class DocumentDAO {
         }
         
         
+    }
+
+    public static int getGroupDocument(String doc_Code) {
+         connectionHelper.openConnection();
+        try {
+
+            String strSQLTemp = "select * from documents t where t.doc_code ='" + doc_Code + "'";
+            ResultSet resultSetTemp = connectionHelper.excuteQuery(strSQLTemp);
+            while (resultSetTemp.next()) {
+                int id = resultSetTemp.getInt("id_partners");
+                connectionHelper.closeConnection();
+                return id;
+            }
+            return -1;
+        } catch (Exception e) {
+
+            connectionHelper.closeConnection();
+            e.printStackTrace();
+            return -1;
+        }
+     
+    }
+
+    //Update group về -1, tức là không có share cho ai hết
+    public static boolean updateGroupByDefault(String doc_Code) {
+      try {
+            connectionHelper.openConnection();
+
+            String strSQL = "update documents set id_partners='-1' where doc_Code = '" + doc_Code + "'";
+            connectionHelper.excuteNonQuery(strSQL);
+
+            connectionHelper.closeConnection();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
