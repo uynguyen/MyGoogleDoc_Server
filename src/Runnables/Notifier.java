@@ -40,7 +40,7 @@ public class Notifier {
     public void Register(ObjectOutputStream os) {
         try {
             subcribers.add(os);
-            os.writeObject(textEditor.getHTMLString());
+            os.writeUTF(textEditor.getHTMLString());
             os.flush();
         } catch (IOException ex) {
             Logger.getLogger(Notifier.class.getName()).log(Level.SEVERE, null, ex);
