@@ -92,41 +92,39 @@ public class MyBus {
     public static Boolean updatePassword(String username, String newPassword) {
         return AccountDAO.updatePassword(username, newPassword);
     }
-    
-    public static Boolean deleteDocument(String doc_Code){
-        
+
+    public static Boolean deleteDocument(String doc_Code) {
+
         return DocumentDAO.deleteDocument(doc_Code);
 
     }
-    
-    public static Boolean leaveDocument(int id_acc, String doc_Code){
-        
+
+    public static Boolean leaveDocument(int id_acc, String doc_Code) {
 
         return PartnerDetailsDAO.removeMember(id_acc, doc_Code);
 
-        
-    }
-    
-    public static Boolean shareDocument(String doc_code, int id_sender, int id_receiver){
-        
-        return CollaborationDAO.shareDocument(doc_code,id_sender,id_receiver);
     }
 
-    public static ArrayList<Invite> getMyInvite(int id_acc){
-      return InviteDAO.getMyInvite(id_acc);
+    public static Boolean shareDocument(String doc_code, int id_sender, int id_receiver) {
+
+        return CollaborationDAO.shareDocument(doc_code, id_sender, id_receiver);
     }
-    
-    public static boolean acceptInvite(int id_Acc, String doc_Code){
-        
-        
-        
-       if(InviteDAO.updateInvite(doc_Code, true))
-       {
-           return PartnerDetailsDAO.insertMember(doc_Code,id_Acc);
-           
-       }
-       return false;
-       
- 
+
+    public static ArrayList<Invite> getMyInvite(int id_acc) {
+        return InviteDAO.getMyInvite(id_acc);
+    }
+
+    public static boolean acceptInvite(int id, int id_Acc, String doc_Code) {
+
+        if (InviteDAO.updateInvite(id, true)) {
+            return PartnerDetailsDAO.insertMember(doc_Code, id_Acc);
+
+        }
+        return false;
+
+    }
+
+    public static boolean rejectInvite(int id) {
+        return InviteDAO.deleteInvite(id);
     }
 }
