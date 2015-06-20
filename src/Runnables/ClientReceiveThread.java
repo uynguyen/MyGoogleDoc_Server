@@ -32,6 +32,7 @@ public class ClientReceiveThread implements Runnable{
         objectInputStream = is;        
         this.notifier = notifier;
         this.textEditor = steos;
+        this.threadNumber = threadNumber;
         actionStack = new Stack<>();
         t = new Thread(this);
         t.start();

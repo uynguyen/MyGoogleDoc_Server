@@ -33,7 +33,10 @@ public class ActionInsert extends Action{
             textPane.getDocument().insertString(_startPosition, getContent(), _attributeset);
             int currentPos = textPane.getCaretPosition();
             if(_startPosition < currentPos){
-                textPane.setCaretPosition(currentPos + _Content.length());
+                int newPos = currentPos + _Content.length();
+                newPos = (newPos > textPane.getStyledDocument().getEndPosition().getOffset())? 
+                        textPane.getStyledDocument().getEndPosition().getOffset(): newPos;
+                textPane.setCaretPosition(newPos);
             }
         } catch (BadLocationException ex) {
             Logger.getLogger(ActionInsert.class.getName()).log(Level.SEVERE, null, ex);

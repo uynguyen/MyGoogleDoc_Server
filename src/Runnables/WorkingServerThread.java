@@ -54,6 +54,7 @@ public class WorkingServerThread implements Runnable{
                 ObjectInputStream ois = new ObjectInputStream(client.getInputStream());
                 
                 //create another thread to receive
+                System.out.println(notifier.GetNumber());
                 ClientReceiveThread clientReceiveThread = new ClientReceiveThread(ois, notifier, textEditor, notifier.GetNumber());
                 
             } catch (IOException ex) {
