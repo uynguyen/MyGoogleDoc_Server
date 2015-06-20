@@ -49,9 +49,7 @@ public class ClientReceiveThread implements Runnable {
             while (true) {
                 try {
                     Actions.Action action = (Actions.Action) objectInputStream.readObject();
-                    System.out.println("Action is ok!");
                     textEditor.ApplyActionChange(action);
-                    System.out.println("Apply is done!");
                     notifier.NotifyAll(action, threadNumber);
                 } catch (IOException | ClassNotFoundException ex) {
                     Logger.getLogger(ClientReceiveThread.class.getName()).log(Level.SEVERE, null, ex);
