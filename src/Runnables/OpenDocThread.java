@@ -34,13 +34,9 @@ public class OpenDocThread implements Runnable{
     public void run() {
         try {
             //Receive doc id to open
-<<<<<<< HEAD
-            String docCode = (String)objectInputStream.readObject();
-=======
+
             String docCode = objectInputStream.readUTF();
->>>>>>> 9d1e3752364dd61ebf460bc260def0e8200ad770
-            System.out.println(docCode);
-            
+
             if(Global.documentPort.containsKey(docCode) == false){
                 //open usable port
                 ServerSocket docSocket = new ServerSocket(0);
@@ -68,8 +64,6 @@ public class OpenDocThread implements Runnable{
                 objectOutputStream.flush();
             }
         } catch (IOException ex) {
-            Logger.getLogger(OpenDocThread.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
             Logger.getLogger(OpenDocThread.class.getName()).log(Level.SEVERE, null, ex);
         } 
     }
