@@ -29,12 +29,14 @@ public class InviteDAO {
             ResultSet resultSet = connectionHelper.excuteQuery(strSQL);
             while (resultSet.next()) {
 
+                
                 int ID = resultSet.getInt("id");
+                String doc_Code= resultSet.getString("doc_code");
                 int id_sender = resultSet.getInt("id_acc_sender");
                 Date date_Invite = resultSet.getDate("date_time_invite");
                 String username_Sender = AccountDAO.getUsernameByID(id_sender);
 
-                Invite temp = new Invite(strSQL, id_sender, username_Sender, date_Invite);
+                Invite temp = new Invite(doc_Code, id_sender, username_Sender, date_Invite);
 
                 result.add(temp);
             }

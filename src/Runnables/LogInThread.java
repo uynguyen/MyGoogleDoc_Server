@@ -10,6 +10,7 @@ import CommunicatePackage.LoginPackage;
 import CommunicatePackage.LoginReturnPackage;
 import Pojo.Account;
 import Pojo.Document;
+import Pojo.Invite;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -46,16 +47,18 @@ public class LogInThread implements Runnable {
 
             if (result == null) {
                 //Send fail signal back to client
-                objectOutputStream.writeObject(new LoginReturnPackage(false, null, null));
+                objectOutputStream.writeObject(new LoginReturnPackage(false, null, null, null));
                 objectOutputStream.flush();
             } else {
                 //Get Document list
                 ArrayList<Document> userDocumentList = MyBus.getListDocument(result.getID());
                 Document[] documentList = new Document[userDocumentList.size()];
                 documentList = userDocumentList.toArray(documentList);
-                
+                ArrayList<Invite> userInviteList = MyBus.getMyInvite(result.getID());
+                Invite[] inviteList = new Invite[userInviteList.size()];
+                inviteList = userInviteList.toArray(inviteList);
                 //Create return package
-                LoginReturnPackage message = new LoginReturnPackage(true, result, documentList);
+                LoginReturnPackage message = new LoginReturnPackage(true, result, documentList,inviteList);
                 //Send success signal with user information and document list
                 objectOutputStream.writeObject(message);
                 objectOutputStream.flush();
