@@ -28,12 +28,14 @@ public class MyGoogleDoc_Server {
         
         try {
             //Running SuperServerThread
-         //  MyBus.getMyInvite(8);
+          // MyBus.getMyInvite(7);
             
+          //  MyBus.acceptInvite(7,"1434783082659");
+        //    MyBus.leaveDocument(7, "1434783082659");
+            MyBus.deleteDocument("1434783082659");
+          //  MyBus.shareDocument("1434783082659", 8, 7);
             
-            MyBus.leaveDocument(8, "1434731302382");
-            
-            
+           // MyBus.getListDocument(7);
             
 //            SuperServerThread superServerThread = new SuperServerThread();
 //            

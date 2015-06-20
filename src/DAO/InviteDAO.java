@@ -16,11 +16,13 @@ import java.util.Date;
  * @author UyNguyen.ITUS
  */
 public class InviteDAO {
+
     private static MySQLConnectionHelper connectionHelper = new MySQLConnectionHelper();
+
     public static ArrayList<Invite> getMyInvite(int id_acc) {
-        
+
         ArrayList<Invite> result = new ArrayList<>();
-           try {
+        try {
             connectionHelper.openConnection();
             String strSQL = "select * from collaboration colla where colla.id_acc_receiver = '" + id_acc + "' and colla.state = '" + false + "'";
 
@@ -43,11 +45,26 @@ public class InviteDAO {
         } finally {
             connectionHelper.closeConnection();
             return result;
-        }      
-        
-        
-        
-      
+        }
+
     }
-    
+
+    public static boolean updateInvite(String doc_Code, boolean state) {
+
+        try {
+            connectionHelper.openConnection();
+            String strSQL = "update collaboration set state='" + state + "' where doc_code = '" + doc_Code + "'";
+
+            boolean result = connectionHelper.excuteNonQuery(strSQL);
+            connectionHelper.closeConnection();
+            return result;
+
+        } catch (Exception e) {
+            connectionHelper.closeConnection();
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+
 }

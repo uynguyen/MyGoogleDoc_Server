@@ -101,13 +101,9 @@ public class MyBus {
     
     public static Boolean leaveDocument(int id_acc, String doc_Code){
         
-        int id_Group = DocumentDAO.getGroupDocument(doc_Code);
-        if(id_Group != -1){
-           
-            return PartnerDetailsDAO.removeMember(id_acc, id_Group, doc_Code);
-            
-        }
-        return false;
+
+        return PartnerDetailsDAO.removeMember(id_acc, doc_Code);
+
         
     }
     
@@ -120,5 +116,17 @@ public class MyBus {
       return InviteDAO.getMyInvite(id_acc);
     }
     
-    
+    public static boolean acceptInvite(int id_Acc, String doc_Code){
+        
+        
+        
+       if(InviteDAO.updateInvite(doc_Code, true))
+       {
+           return PartnerDetailsDAO.insertMember(doc_Code,id_Acc);
+           
+       }
+       return false;
+       
+ 
+    }
 }

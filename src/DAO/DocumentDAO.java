@@ -44,9 +44,8 @@ public class DocumentDAO {
                 String path = resultSet.getString("path");
                 Date dateCreate = resultSet.getDate("date_create");
 
-                int IDGroup = resultSet.getInt("id_partners");
                 String code = resultSet.getString("doc_code");
-                Document doc = new Document(ID, name, path, dateCreate, IDAccount, IDGroup, code);
+                Document doc = new Document(ID, name, path, dateCreate, IDAccount,  code);
                 result.add(doc);
             }
 
@@ -56,17 +55,16 @@ public class DocumentDAO {
 
             resultSet = connectionHelper.excuteQuery(strSQL);
             while (resultSet.next()) {
+                String code = resultSet.getString("doc_code");
+            
 
-                int IDGroup = resultSet.getInt("id_partners");
-
-                if (IDGroup != -1 && checkBelongGroup(IDGroup, IDAccount)) {
+                if (checkBelongGroup(code, IDAccount)) {
                     int ID = resultSet.getInt("id");
                     String name = resultSet.getString("name");
                     String path = resultSet.getString("path");
                     Date dateCreate = resultSet.getDate("date_create");
-                    int idOwner = resultSet.getInt("id_owner");
-                    String code = resultSet.getString("doc_code");
-                    Document doc = new Document(ID, name, path, dateCreate, idOwner, IDGroup,code);
+                    int idOwner = resultSet.getInt("id_owner");                   
+                    Document doc = new Document(ID, name, path, dateCreate, idOwner, code);
                     result.add(doc);
                 }
 
@@ -84,12 +82,12 @@ public class DocumentDAO {
     }
 
     //Hàm kiêm tra xem một tài khoản có thuộc về 1 nhóm người đang cộng tác một tài liệu không
-    public static boolean checkBelongGroup(int IDGroup, int IDAccount) {
+    public static boolean checkBelongGroup(String doc_Code, int IDAccount) {
 
         connectionHelper.openConnection();
         try {
 
-            String strSQLTemp = "select * from partnerdetails t where t.id_group ='" + IDGroup + "' and t.id_member ='" + IDAccount + "'";
+            String strSQLTemp = "select * from partnerdetails t where t.doc_code ='" + doc_Code + "' and t.id_member ='" + IDAccount + "'";
             ResultSet resultSetTemp = connectionHelper.excuteQuery(strSQLTemp);
             while (resultSetTemp.next()) {
                 connectionHelper.closeConnection();
@@ -118,8 +116,8 @@ public class DocumentDAO {
             boolean result = file.createNewFile();
             if (result) {
 
-                String sql = "INSERT INTO documents(name, path, date_create, id_owner, id_partners, doc_code)"
-                        + " VALUES ( '" + title + "','" + path + "','" + cal.getTime() + "','" + id_Owner + "','" + "-1" + "','" + doc_code +"')";
+                String sql = "INSERT INTO documents(name, path, date_create, id_owner, doc_code)"
+                        + " VALUES ( '" + title + "','" + path + "','" + cal.getTime() + "','" + id_Owner + "','" + doc_code +"')";
                 if(connectionHelper.excuteNonQuery(sql))
                 {
                     return doc_code;
@@ -187,24 +185,22 @@ public class DocumentDAO {
         connectionHelper.openConnection();
         try {
             String path = "";
-            int IDGroup  = -1;
+         
             String strSQLTemp = "select * from documents t where t.doc_code ='" + doc_Code + "'";
             ResultSet resultSetTemp = connectionHelper.excuteQuery(strSQLTemp);
             while (resultSetTemp.next()) {
              
                path = resultSetTemp.getString("path");
-               IDGroup = resultSetTemp.getInt("id_partners");
+          
                break;
             }
             String result = "";
-            if(path != "" && IDGroup != -1)
+            if(path != "")
             {
                 
-                strSQLTemp = "DELETE  FROM documents t where t.doc_code ='" + doc_Code + "'";
+
                 
-                boolean t1 = connectionHelper.excuteNonQuery(strSQLTemp);
-                
-                strSQLTemp = "DELETE  FROM partnerdetails t where t.id_group ='" + IDGroup + "'";
+                strSQLTemp = "DELETE  FROM partnerdetails t where t.doc_code ='" + doc_Code + "'";
                 
                 boolean t2 = connectionHelper.excuteNonQuery(strSQLTemp);
                 
@@ -212,6 +208,11 @@ public class DocumentDAO {
                 strSQLTemp = "DELETE  FROM collaboration t where t.doc_code ='" + doc_Code + "'";
                 
                 boolean t3 = connectionHelper.excuteNonQuery(strSQLTemp);
+                
+                
+                strSQLTemp = "DELETE  FROM documents t where t.doc_code ='" + doc_Code + "'";
+                
+                boolean t1 = connectionHelper.excuteNonQuery(strSQLTemp);
                 
                 connectionHelper.closeConnection();
                 if(t1 && t2 && t3){
@@ -246,39 +247,39 @@ public class DocumentDAO {
         
     }
 
-    public static int getGroupDocument(String doc_Code) {
-         connectionHelper.openConnection();
-        try {
+//    public static int getGroupDocument(String doc_Code) {
+//         connectionHelper.openConnection();
+//        try {
+//
+//            String strSQLTemp = "select * from documents t where t.doc_code ='" + doc_Code + "'";
+//            ResultSet resultSetTemp = connectionHelper.excuteQuery(strSQLTemp);
+//            while (resultSetTemp.next()) {
+//                int id = resultSetTemp.getInt("id_partners");
+//                connectionHelper.closeConnection();
+//                return id;
+//            }
+//            return -1;
+//        } catch (Exception e) {
+//
+//            connectionHelper.closeConnection();
+//            e.printStackTrace();
+//            return -1;
+//        }
+//     
+//    }
 
-            String strSQLTemp = "select * from documents t where t.doc_code ='" + doc_Code + "'";
-            ResultSet resultSetTemp = connectionHelper.excuteQuery(strSQLTemp);
-            while (resultSetTemp.next()) {
-                int id = resultSetTemp.getInt("id_partners");
-                connectionHelper.closeConnection();
-                return id;
-            }
-            return -1;
-        } catch (Exception e) {
-
-            connectionHelper.closeConnection();
-            e.printStackTrace();
-            return -1;
-        }
-     
-    }
-
-    //Update group về -1, tức là không có share cho ai hết
-    public static boolean updateGroupByDefault(String doc_Code) {
-      try {
-            connectionHelper.openConnection();
-
-            String strSQL = "update documents set id_partners='-1' where doc_Code = '" + doc_Code + "'";
-            connectionHelper.excuteNonQuery(strSQL);
-
-            connectionHelper.closeConnection();
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
+//    //Update group về -1, tức là không có share cho ai hết
+//    public static boolean updateGroupByDefault(String doc_Code) {
+//      try {
+//            connectionHelper.openConnection();
+//
+//            String strSQL = "update documents set id_partners='-1' where doc_Code = '" + doc_Code + "'";
+//            connectionHelper.excuteNonQuery(strSQL);
+//
+//            connectionHelper.closeConnection();
+//            return true;
+//        } catch (Exception e) {
+//            return false;
+//        }
+//    }
 }

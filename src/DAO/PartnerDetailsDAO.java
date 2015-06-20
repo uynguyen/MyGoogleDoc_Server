@@ -5,6 +5,7 @@
  */
 package DAO;
 
+import static DAO.AccountDAO.checkExistAccount;
 import java.io.File;
 import java.sql.ResultSet;
 
@@ -16,28 +17,12 @@ public class PartnerDetailsDAO {
 
     private static MySQLConnectionHelper connectionHelper = new MySQLConnectionHelper();
 
-    public static Boolean removeMember(int id_acc, int id_group, String doc_Code) {
+    public static Boolean removeMember(int id_acc, String doc_Code) {
         connectionHelper.openConnection();
         try {
 
-            String strSQLTemp = "SELECT COUNT(*) AS total FROM partnerdetails t where t.id_group ='" + id_group + "'";
-
-            ResultSet rSet = connectionHelper.excuteQuery(strSQLTemp);
-            rSet.next();
-            int total = rSet.getInt("total");
-            
-            
-            if(total == 1){// Nếu như nhóm chỉ còn 1 người và người đó rời khỏi thì cập nhật id group của doc về -1
-                
-                DocumentDAO.updateGroupByDefault(doc_Code);
-                
-                
-                
-                
-            }
-            strSQLTemp = "DELETE FROM partnerdetails t where t.id_member ='" + id_acc + "'";
+            String strSQLTemp = "DELETE FROM partnerdetails t where t.id_member ='" + id_acc + "' and t.doc_code ='" + doc_Code + "'";
             boolean result = connectionHelper.excuteNonQuery(strSQLTemp);
-            
 
             connectionHelper.closeConnection();
 
@@ -47,6 +32,24 @@ public class PartnerDetailsDAO {
 
             connectionHelper.closeConnection();
             e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean insertMember(String doc_Code, int id_Acc) {
+
+        try {
+            connectionHelper.openConnection();
+
+            String strSQL = "INSERT INTO partnerdetails(doc_code,id_member) "
+                    + " VALUES ( '" + doc_Code + "','" + id_Acc + "')";
+
+            boolean result = connectionHelper.excuteNonQuery(strSQL);
+            connectionHelper.closeConnection();
+            return result;
+
+        } catch (Exception e) {
+            connectionHelper.closeConnection();
             return false;
         }
     }
