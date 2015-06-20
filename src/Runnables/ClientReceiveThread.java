@@ -55,9 +55,7 @@ public class ClientReceiveThread implements Runnable{
                 notifier.NotifyAll(action, threadNumber);
                 
             }
-        } catch (IOException ex) {
-            Logger.getLogger(ClientReceiveThread.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (IOException | ClassNotFoundException ex) {
             Logger.getLogger(ClientReceiveThread.class.getName()).log(Level.SEVERE, null, ex);
         }
         
