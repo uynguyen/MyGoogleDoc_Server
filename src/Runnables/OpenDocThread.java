@@ -34,7 +34,7 @@ public class OpenDocThread implements Runnable{
     public void run() {
         try {
             //Receive doc id to open
-            String docCode = (String)objectInputStream.readUTF();
+            String docCode = (String)objectInputStream.readObject();
             System.out.println(docCode);
             
             if(Global.documentPort.containsKey(docCode) == false){
@@ -64,6 +64,8 @@ public class OpenDocThread implements Runnable{
                 objectOutputStream.flush();
             }
         } catch (IOException ex) {
+            Logger.getLogger(OpenDocThread.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
             Logger.getLogger(OpenDocThread.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
