@@ -18,8 +18,8 @@ import java.util.logging.Logger;
  *
  * @author ThanhTung
  */
-public class ClientReceiveThread implements Runnable{
-    
+public class ClientReceiveThread implements Runnable {
+
     Thread t;
     ObjectInputStream objectInputStream;
     Notifier notifier;
@@ -27,9 +27,9 @@ public class ClientReceiveThread implements Runnable{
     Stack<Action> actionStack;
     StyledTextEditorOnServer textEditor;
     int threadNumber;
-    
-    public ClientReceiveThread(ObjectInputStream is, Notifier notifier, StyledTextEditorOnServer steos, int threadNumber){
-        objectInputStream = is;        
+
+    public ClientReceiveThread(ObjectInputStream is, Notifier notifier, StyledTextEditorOnServer steos, int threadNumber) {
+        objectInputStream = is;
         this.notifier = notifier;
         this.textEditor = steos;
         this.threadNumber = threadNumber;
@@ -42,23 +42,26 @@ public class ClientReceiveThread implements Runnable{
     public void run() {
         try {
             //receive client information
-            clientInfo = (Account)objectInputStream.readObject();
+            clientInfo = (Account) objectInputStream.readObject();
             System.out.println(clientInfo.getID() + ": " + clientInfo.getUsername());
-            
+
             //receive action
-            while (true)
-            {
-                Action action = (Action)objectInputStream.readObject();
-                
-               textEditor.ApplyActionChange(action);
-                
-                notifier.NotifyAll(action, threadNumber);
-                
+            while (true) {
+                try {
+                    Actions.Action action = (Actions.Action) objectInputStream.readObject();
+                    System.out.println("Action is ok!");
+                    textEditor.ApplyActionChange(action);
+                    System.out.println("Apply is done!");
+                    notifier.NotifyAll(action, threadNumber);
+                } catch (IOException | ClassNotFoundException ex) {
+                    Logger.getLogger(ClientReceiveThread.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
             }
         } catch (IOException | ClassNotFoundException ex) {
             Logger.getLogger(ClientReceiveThread.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
-    
+
 }
