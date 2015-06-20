@@ -50,7 +50,7 @@ public class ClientReceiveThread implements Runnable{
             {
                 Action action = (Action)objectInputStream.readObject();
                 
-             //   textEditor.ApplyActionChange(action);
+               textEditor.ApplyActionChange(action);
                 
                 notifier.NotifyAll(action, threadNumber);
                 
