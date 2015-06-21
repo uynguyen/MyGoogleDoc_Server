@@ -36,7 +36,7 @@ public final class StyledTextEditorOnServer extends javax.swing.JPanel {
 
     }
 
-  public void ApplyActionChange(Actions.Action action){
+  synchronized public void ApplyActionChange(Actions.Action action){
         action.onDraw(textPane);
     }
   
