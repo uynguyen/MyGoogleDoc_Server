@@ -11,7 +11,7 @@ package Pojo;
  */
 public enum EnumUserAction {
     
-    CREATEDOC(0), OPENDOC(1), REGISTER(2), LOGIN(3), RESETPASS(4), REPLYINVITE(5);
+    CREATEDOC(0), OPENDOC(1), REGISTER(2), LOGIN(3), RESETPASS(4), REPLYINVITE(5), SHARE(6);
     //MEETING(1), EVENT(2), ANNIVERSARY(3),
     private int value;
 
