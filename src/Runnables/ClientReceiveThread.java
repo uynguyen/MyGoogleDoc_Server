@@ -6,6 +6,7 @@
 package Runnables;
 
 import Actions.Action;
+import Actions.ActionChat;
 import CustomComponents.StyledTextEditorOnServer;
 import Pojo.Account;
 import java.io.IOException;
@@ -49,8 +50,20 @@ public class ClientReceiveThread implements Runnable {
             while (true) {
                 try {
                     Actions.Action action = (Actions.Action) objectInputStream.readObject();
-                    textEditor.ApplyActionChange(action);
-                    notifier.NotifyAll(action, threadNumber);
+                    
+                    
+                    if(action instanceof ActionChat)
+                    {
+                        
+                         notifier.NotifyAll(action, threadNumber);
+                    }
+                    else
+                    {
+                         textEditor.ApplyActionChange(action);
+                         notifier.NotifyAll(action, threadNumber);
+                    }
+                    
+                   
                 } catch (IOException | ClassNotFoundException ex) {
                     Logger.getLogger(ClientReceiveThread.class.getName()).log(Level.SEVERE, null, ex);
                 }
