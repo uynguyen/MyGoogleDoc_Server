@@ -261,7 +261,7 @@ public class DocumentDAO {
 //            return false;
 //        }
 //    }
-    static Document getDocumentByCode(String doc_Code) {
+    public static Document getDocumentByCode(String doc_Code) {
         try {
             connectionHelper.openConnection();
             String strSQLTemp = "select * from documents t where t.doc_code ='" + doc_Code + "'";
