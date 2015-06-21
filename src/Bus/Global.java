@@ -16,4 +16,6 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class Global {
     public static ConcurrentHashMap documentPort = new ConcurrentHashMap();
+    public static int MainServerPort = 51399;
+    public static int SuperServerPort = 13599;
 }

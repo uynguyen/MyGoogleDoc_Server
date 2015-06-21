@@ -45,7 +45,7 @@ public class DocumentDAO {
                 Date dateCreate = resultSet.getDate("date_create");
 
                 String code = resultSet.getString("doc_code");
-                Document doc = new Document(ID, name, path, dateCreate, IDAccount,  code);
+                Document doc = new Document(ID, name, path, dateCreate, IDAccount, code);
                 result.add(doc);
             }
 
@@ -56,14 +56,13 @@ public class DocumentDAO {
             resultSet = connectionHelper.excuteQuery(strSQL);
             while (resultSet.next()) {
                 String code = resultSet.getString("doc_code");
-            
 
                 if (checkBelongGroup(code, IDAccount)) {
                     int ID = resultSet.getInt("id");
                     String name = resultSet.getString("name");
                     String path = resultSet.getString("path");
                     Date dateCreate = resultSet.getDate("date_create");
-                    int idOwner = resultSet.getInt("id_owner");                   
+                    int idOwner = resultSet.getInt("id_owner");
                     Document doc = new Document(ID, name, path, dateCreate, idOwner, code);
                     result.add(doc);
                 }
@@ -117,15 +116,13 @@ public class DocumentDAO {
             if (result) {
 
                 String sql = "INSERT INTO documents(name, path, date_create, id_owner, doc_code)"
-                        + " VALUES ( '" + title + "','" + path + "','" + cal.getTime() + "','" + id_Owner + "','" + doc_code +"')";
-                if(connectionHelper.excuteNonQuery(sql))
-                {
+                        + " VALUES ( '" + title + "','" + path + "','" + cal.getTime() + "','" + id_Owner + "','" + doc_code + "')";
+                if (connectionHelper.excuteNonQuery(sql)) {
                     return doc_code;
                 }
 
-            } 
+            }
             return "";
- 
 
         } catch (Exception e) {
 
@@ -135,41 +132,34 @@ public class DocumentDAO {
         }
 
     }
-    
-    public static String openDocument(String doc_Code){
-        
+
+    public static String openDocument(String doc_Code) {
+
         connectionHelper.openConnection();
         try {
             String path = "";
             String strSQLTemp = "select * from documents t where t.doc_code ='" + doc_Code + "'";
             ResultSet resultSetTemp = connectionHelper.excuteQuery(strSQLTemp);
             while (resultSetTemp.next()) {
-               connectionHelper.closeConnection();
-               path = resultSetTemp.getString("path");
-               break;
+                connectionHelper.closeConnection();
+                path = resultSetTemp.getString("path");
+                break;
             }
             String result = "";
-            if(path != "")
-            {
-                
-                
+            if (path != "") {
+
                 FileReader fr = new FileReader(path);
                 BufferedReader br = new BufferedReader(fr);
-                
+
                 String aline;
-                while( (aline = br.readLine()) != null  ){
+                while ((aline = br.readLine()) != null) {
                     result += aline;
                 }
-               
+
                 br.close();
             }
-            
-            
-            
+
             return result;
-              
- 
- 
 
         } catch (Exception e) {
 
@@ -181,61 +171,52 @@ public class DocumentDAO {
     }
 
     public static boolean deleteDocument(String doc_Code) {
-       
+
         connectionHelper.openConnection();
         try {
             String path = "";
-         
+
             String strSQLTemp = "select * from documents t where t.doc_code ='" + doc_Code + "'";
             ResultSet resultSetTemp = connectionHelper.excuteQuery(strSQLTemp);
             while (resultSetTemp.next()) {
-             
-               path = resultSetTemp.getString("path");
-          
-               break;
+
+                path = resultSetTemp.getString("path");
+
+                break;
             }
             String result = "";
-            if(path != "")
-            {
-                
+            if (path != "") {
 
-                
                 strSQLTemp = "DELETE  FROM partnerdetails t where t.doc_code ='" + doc_Code + "'";
-                
+
                 boolean t2 = connectionHelper.excuteNonQuery(strSQLTemp);
-                
-                
+
                 strSQLTemp = "DELETE  FROM collaboration t where t.doc_code ='" + doc_Code + "'";
-                
+
                 boolean t3 = connectionHelper.excuteNonQuery(strSQLTemp);
-                
-                
+
                 strSQLTemp = "DELETE  FROM documents t where t.doc_code ='" + doc_Code + "'";
-                
+
                 boolean t1 = connectionHelper.excuteNonQuery(strSQLTemp);
-                
+
                 connectionHelper.closeConnection();
-                if(t1 && t2 && t3){
-                    
+                if (t1 && t2 && t3) {
+
                     File file = new File(path);
- 
-                    if(file.delete()){
-                            return true;
-                    }else{
-                           return false;
+
+                    if (file.delete()) {
+                        return true;
+                    } else {
+                        return false;
                     }
-                    
-                    
+
                 }
-                
+
             }
-            
+
             connectionHelper.closeConnection();
-            
+
             return false;
-              
- 
- 
 
         } catch (Exception e) {
 
@@ -243,8 +224,7 @@ public class DocumentDAO {
             e.printStackTrace();
             return false;
         }
-        
-        
+
     }
 
 //    public static int getGroupDocument(String doc_Code) {
@@ -267,7 +247,6 @@ public class DocumentDAO {
 //        }
 //     
 //    }
-
 //    //Update group về -1, tức là không có share cho ai hết
 //    public static boolean updateGroupByDefault(String doc_Code) {
 //      try {
@@ -282,4 +261,28 @@ public class DocumentDAO {
 //            return false;
 //        }
 //    }
+    static Document getDocumentByCode(String doc_Code) {
+        try {
+            connectionHelper.openConnection();
+            String strSQLTemp = "select * from documents t where t.doc_code ='" + doc_Code + "'";
+            ResultSet resultSet = connectionHelper.excuteQuery(strSQLTemp);
+            while (resultSet.next()) {
+                int ID = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                String path = resultSet.getString("path");
+                Date dateCreate = resultSet.getDate("date_create");
+                int id_Owner = resultSet.getInt("id_owner");
+                String code = resultSet.getString("doc_code");
+                connectionHelper.closeConnection();
+                return new Document(ID, name, path, dateCreate, id_Owner, code);
+
+            }
+            connectionHelper.closeConnection();
+            return null;
+        } catch (Exception e) {
+            connectionHelper.closeConnection();
+            return null;
+        }
+
+    }
 }

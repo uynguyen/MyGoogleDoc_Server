@@ -5,6 +5,7 @@
  */
 package Runnables;
 
+import Bus.Global;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -27,8 +28,8 @@ public class SuperServerThread implements Runnable{
     @Override
     public void run() {
         try {
-            ServerSocket server = new ServerSocket(13599);
-            System.out.println("13599");
+            ServerSocket server = new ServerSocket(Global.SuperServerPort);
+            System.out.println(server.getLocalPort());
             Socket client = null;
             do{
                 client = server.accept();
