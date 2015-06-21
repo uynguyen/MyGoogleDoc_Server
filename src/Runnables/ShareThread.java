@@ -36,11 +36,16 @@ public class ShareThread implements Runnable{
         try {
             SharePackage sharePackage = (SharePackage) objectInputStream.readObject();
             
+            boolean result = Bus.MyBus.shareDocument(sharePackage.docCode, sharePackage.idClient, sharePackage.username);
             
+            objectOutputStream.writeBoolean(result);
+            objectOutputStream.flush();
+            
+            objectInputStream.close();
+            objectOutputStream.flush();
+            objectOutputStream.close();
 
-        } catch (IOException ex) {
-            Logger.getLogger(ReplyInviteThread.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (IOException | ClassNotFoundException ex) {
             Logger.getLogger(ReplyInviteThread.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
