@@ -21,8 +21,8 @@ public class ActionSelect extends Action{
     @Override
     public void onDraw(JTextPane textPane) {
        System.err.println("Select: " + _startPosition + "->" + _endPosition);
-        if (_startPosition == _endPosition)
-           textPane.setCaretPosition(_endPosition);
+//        if (_startPosition == _endPosition)
+//           textPane.setCaretPosition(_endPosition);
 //       textPane.setSelectionStart(_startPosition);
 //       textPane.setSelectionEnd(_endPosition);
     }
