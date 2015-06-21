@@ -105,9 +105,9 @@ public class MyBus {
 
     }
 
-    public static Boolean shareDocument(String doc_code, int id_sender, int id_receiver) {
+    public static Boolean shareDocument(String doc_code, int id_sender, String user_Receiver) {
 
-        return CollaborationDAO.shareDocument(doc_code, id_sender, id_receiver);
+        return CollaborationDAO.shareDocument(doc_code, id_sender, user_Receiver);
     }
 
     public static ArrayList<Invite> getMyInvite(int id_acc) {
