@@ -34,7 +34,7 @@ public class Notifier {
     }
 
     public int GetNumber() {
-        return subcribers.size() - 1;
+        return subcribers.size();
     }
 
     public void Register(ObjectOutputStream os) {
