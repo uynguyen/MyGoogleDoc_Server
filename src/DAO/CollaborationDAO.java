@@ -5,6 +5,7 @@
  */
 package DAO;
 
+import Pojo.Account;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -18,19 +19,26 @@ public class CollaborationDAO {
 
     private static MySQLConnectionHelper connectionHelper = new MySQLConnectionHelper();
 
-    public static Boolean shareDocument(String doc_code, int id_sender, int id_receiver) {
+    public static Boolean shareDocument(String doc_code, int id_sender, String username_receiver) {
 
         connectionHelper.openConnection();
         try {
-            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-            Calendar cal = Calendar.getInstance();
 
-            String sql = "INSERT INTO collaboration(doc_code, id_acc_sender, id_acc_receiver, date_time_invite, state)"
-                    + " VALUES ( '" + doc_code + "','" + id_sender + "','" + id_receiver + "','" + cal.getTime() + "','" + false + "')";
+            Account recever = AccountDAO.getAccountByUsername(username_receiver);
+            if (recever != null)  {
+                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                Calendar cal = Calendar.getInstance();
 
-            boolean result = connectionHelper.excuteNonQuery(sql);
+                String sql = "INSERT INTO collaboration(doc_code, id_acc_sender, id_acc_receiver, date_time_invite, state)"
+                        + " VALUES ( '" + doc_code + "','" + id_sender + "','" + recever.getID() + "','" + cal.getTime() + "','" + false + "')";
+
+                boolean result = connectionHelper.excuteNonQuery(sql);
+                connectionHelper.closeConnection();
+                return result;
+            }
             connectionHelper.closeConnection();
-            return result;
+            return false;
+
         } catch (Exception e) {
 
             connectionHelper.closeConnection();
