@@ -127,4 +127,9 @@ public class MyBus {
     public static boolean rejectInvite(int id) {
         return InviteDAO.deleteInvite(id);
     }
+    
+    
+    public static Document getDocumentByCode(String doc_Code){
+        return DocumentDAO.getDocumentByCode(doc_Code);
+    }
 }
