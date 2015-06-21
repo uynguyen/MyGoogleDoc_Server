@@ -39,8 +39,10 @@ public class HandleLoggedInClientRequestThread implements Runnable{
             
             if(flag == EnumUserAction.CREATEDOC.getValue()){
                 CreateDocThread createDocThread = new CreateDocThread(objectOutputStream, objectInputStream);                
-            } else {
+            } else if(flag == EnumUserAction.OPENDOC.getValue()){
                 OpenDocThread openDocThread = new OpenDocThread(objectOutputStream, objectInputStream);
+            } else {
+                
             }
             
         } catch (IOException ex) {
