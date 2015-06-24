@@ -153,14 +153,14 @@ public class AccountDAO {
     }
 
     static String getUsernameByID(int id_sender) {
-        
+
         try {
             connectionHelper.openConnection();
             String strSQL = "select * from accounts acc where acc.id = '" + id_sender + "'";
 
             ResultSet resultSet = connectionHelper.excuteQuery(strSQL);
             while (resultSet.next()) {
-                
+
                 String result = resultSet.getString("username");
                 connectionHelper.closeConnection();
                 return result;
@@ -173,7 +173,36 @@ public class AccountDAO {
         }
         connectionHelper.closeConnection();
         return "0";
-        
+
+    }
+
+    static Account getAccountByUsername(String username_receiver) {
+        try {
+            connectionHelper.openConnection();
+            String strSQL = "select * from accounts acc where acc.username = '" + username_receiver + "'";
+
+            ResultSet resultSet = connectionHelper.excuteQuery(strSQL);
+            while (resultSet.next()) {
+                Account result = new Account();
+
+                int ID = resultSet.getInt("id");
+
+                String email = resultSet.getString("email");
+                String avatar = resultSet.getString("avatar");
+
+                result = new Account(ID, username_receiver, avatar, email);
+
+                connectionHelper.closeConnection();
+                return result;
+
+            }
+            connectionHelper.closeConnection();
+            return null;
+        } catch (Exception e) {
+            connectionHelper.closeConnection();
+            return null;
+        }
+
     }
 
 }
