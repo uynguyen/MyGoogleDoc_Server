@@ -7,6 +7,7 @@ package Runnables;
 
 import Actions.Action;
 import Actions.ActionChat;
+import Actions.ActionJoin;
 import CustomComponents.StyledTextEditorOnServer;
 import Pojo.Account;
 import java.io.IOException;
@@ -45,6 +46,10 @@ public class ClientReceiveThread implements Runnable {
             //receive client information
             clientInfo = (Account) objectInputStream.readObject();
             System.out.println(clientInfo.getID() + ": " + clientInfo.getUsername());
+            
+            ActionJoin temp = new ActionJoin(null);
+            temp.setUsername(clientInfo.getUsername());            
+            notifier.NotifyAll(temp, threadNumber);
 
             //receive action
             while (true) {
