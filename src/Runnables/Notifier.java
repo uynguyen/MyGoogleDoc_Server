@@ -56,8 +56,19 @@ public class Notifier {
                     os.flush();
                 } catch (IOException ex) {
                     Logger.getLogger(Notifier.class.getName()).log(Level.SEVERE, null, ex);
+                    CloseConnection(i);                    
                 }
             }
+        }
+    }
+
+    private void CloseConnection(int i) {
+        try {
+            subcribers.get(i).flush();
+            subcribers.get(i).close();
+            subcribers.remove(i);
+        } catch (IOException ex) {
+            Logger.getLogger(Notifier.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
