@@ -14,7 +14,7 @@ import javax.swing.text.AttributeSet;
  * @author UyNguyen.ITUS
  */
 public abstract class Action implements Serializable{
-    private static final long serialVersionUID = 6529685098267757690L;
+    protected static final long serialVersionUID = 6529685098267757690L;
     protected int _startPosition;
     protected int _endPosition;
     protected int _userID;
