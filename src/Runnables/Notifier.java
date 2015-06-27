@@ -49,7 +49,7 @@ public class Notifier {
 
     synchronized public void NotifyAll(Object message, int sender) {
         for (int i = 0; i < subcribers.size(); i++) {
-            if (i != sender) {
+            //if (i != sender) {
                 try {
                     ObjectOutputStream os = subcribers.get(i);
                     os.writeObject(message);
@@ -58,7 +58,7 @@ public class Notifier {
                     Logger.getLogger(Notifier.class.getName()).log(Level.SEVERE, null, ex);
                     CloseConnection(i);                    
                 }
-            }
+            //}
         }
     }
 

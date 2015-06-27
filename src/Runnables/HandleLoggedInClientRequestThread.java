@@ -43,8 +43,12 @@ public class HandleLoggedInClientRequestThread implements Runnable{
                 OpenDocThread openDocThread = new OpenDocThread(objectOutputStream, objectInputStream);
             } else if(flag == EnumUserAction.REPLYINVITE.getValue()){
                 ReplyInviteThread replyInviteThread = new ReplyInviteThread(objectOutputStream, objectInputStream);
-            } else {
+            } else if(flag == EnumUserAction.SHARE.getValue()){
                 ShareThread shareThread = new ShareThread(objectOutputStream, objectInputStream);
+            } else if(flag == EnumUserAction.DELETE.getValue()){
+                DeleteThread deleteThread = new DeleteThread(objectOutputStream, objectInputStream);
+            } else {
+                LeaveThread leaveThread = new LeaveThread(objectOutputStream, objectInputStream);
             }
             
         } catch (IOException ex) {
