@@ -135,6 +135,10 @@ public class MyBus {
         return false;
 
     }
+    
+    public static String getUsernameByID(int id){
+        return AccountDAO.getUsernameByID(id);
+    }
 
     public static Account getAccountByUsername(String username){
         return AccountDAO.getAccountByUsername(username);

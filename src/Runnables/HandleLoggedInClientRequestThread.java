@@ -5,6 +5,7 @@
  */
 package Runnables;
 
+import Bus.NotificationPusher;
 import Pojo.EnumUserAction;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -20,9 +21,11 @@ import java.util.logging.Logger;
 public class HandleLoggedInClientRequestThread implements Runnable{
     Thread t;
     Socket client;
+    NotificationPusher notificationPusher;
 
     public HandleLoggedInClientRequestThread(Socket client){
         this.client = client;
+        notificationPusher = new NotificationPusher();
         t  = new Thread(this);
         t.start();
     }
@@ -44,11 +47,14 @@ public class HandleLoggedInClientRequestThread implements Runnable{
             } else if(flag == EnumUserAction.REPLYINVITE.getValue()){
                 ReplyInviteThread replyInviteThread = new ReplyInviteThread(objectOutputStream, objectInputStream);
             } else if(flag == EnumUserAction.SHARE.getValue()){
-                ShareThread shareThread = new ShareThread(objectOutputStream, objectInputStream);
+                ShareThread shareThread = new ShareThread(objectOutputStream, objectInputStream, notificationPusher);
             } else if(flag == EnumUserAction.DELETE.getValue()){
                 DeleteThread deleteThread = new DeleteThread(objectOutputStream, objectInputStream);
-            } else {
+            } else if(flag == EnumUserAction.LEAVE.getValue()){
                 LeaveThread leaveThread = new LeaveThread(objectOutputStream, objectInputStream);
+            } else {
+                String username = objectInputStream.readUTF();
+                notificationPusher.Register(objectOutputStream, objectInputStream, username);
             }
             
         } catch (IOException ex) {

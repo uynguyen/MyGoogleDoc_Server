@@ -152,7 +152,7 @@ public class AccountDAO {
 
     }
 
-    static String getUsernameByID(int id_sender) {
+    public static String getUsernameByID(int id_sender) {
 
         try {
             connectionHelper.openConnection();
