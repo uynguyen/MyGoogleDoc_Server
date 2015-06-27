@@ -5,6 +5,7 @@
  */
 package Runnables;
 
+import Bus.Notifier;
 import CustomComponents.StyledTextEditorOnServer;
 import java.io.IOException;
 import java.io.ObjectInputStream;
