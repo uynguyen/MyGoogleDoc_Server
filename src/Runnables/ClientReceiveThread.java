@@ -65,7 +65,7 @@ public class ClientReceiveThread implements Runnable {
 
                             notifier.NotifyAll(action, threadNumber);
                         } else {
-                            // textEditor.ApplyActionChange(action);
+                             textEditor.ApplyActionChange(action);
                             notifier.NotifyAll(action, threadNumber);
                         }
                     
