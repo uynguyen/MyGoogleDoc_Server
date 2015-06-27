@@ -25,9 +25,10 @@ public class WorkingServerThread implements Runnable{
     Notifier notifier;
     String docCode;
     StyledTextEditorOnServer textEditor;
-    
+   
     public WorkingServerThread(ServerSocket server, String docCode){
         this.server = server;        
+        this.docCode = docCode;
         textEditor = new StyledTextEditorOnServer();
         notifier = new Notifier(docCode, textEditor);
         t = new Thread(this);
@@ -38,6 +39,9 @@ public class WorkingServerThread implements Runnable{
     public void run() {
         do{
             try {
+                //Open thread update Document
+                UpdateDocumentThread documentThread = new UpdateDocumentThread(docCode, textEditor, 10);
+                
                 //accept a port
                 Socket client = server.accept();
                 
@@ -53,6 +57,8 @@ public class WorkingServerThread implements Runnable{
                 //create another thread to receive
                 System.out.println(notifier.GetNumber());
                 ClientReceiveThread clientReceiveThread = new ClientReceiveThread(ois, notifier, textEditor, notifier.GetNumber());
+                               
+                
                 
                 //Register client outputStream
                 notifier.Register(oos);
