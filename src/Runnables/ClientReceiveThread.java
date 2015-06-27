@@ -13,9 +13,10 @@ import Pojo.Account;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.instrument.Instrumentation;
-import java.util.Stack;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import sun.misc.Queue;
 
 /**
  *
@@ -27,17 +28,18 @@ public class ClientReceiveThread implements Runnable {
     ObjectInputStream objectInputStream;
     Notifier notifier;
     Account clientInfo;
-    Stack<Action> actionStack;
+
     StyledTextEditorOnServer textEditor;
     int threadNumber;
     Instrumentation instrumentation;
+    UpdateDocumentThread _upDateDocumentThread;
 
-    public ClientReceiveThread(ObjectInputStream is, Notifier notifier, StyledTextEditorOnServer steos, int threadNumber) {
+    public ClientReceiveThread(ObjectInputStream is, Notifier notifier, StyledTextEditorOnServer steos, int threadNumber, UpdateDocumentThread updateDocumentThread) {
         objectInputStream = is;
         this.notifier = notifier;
         this.textEditor = steos;
         this.threadNumber = threadNumber;
-        actionStack = new Stack<>();
+        this._upDateDocumentThread = updateDocumentThread;
         t = new Thread(this);
         t.start();
     }
@@ -57,18 +59,20 @@ public class ClientReceiveThread implements Runnable {
             while (true) {
                 try {
 
-                  
-                        Actions.Action action = (Actions.Action) objectInputStream.readObject();
-                        System.out.println("Input");
+                    Actions.Action action = (Actions.Action) objectInputStream.readObject();
+                    synchronized (_upDateDocumentThread.getLstAction()) {
+                        _upDateDocumentThread.getLstAction().enqueue(action);
+                    }
 
-                        if (action instanceof ActionChat) {
+                    System.out.println("Input");
 
-                            notifier.NotifyAll(action, threadNumber);
-                        } else {
-                             textEditor.ApplyActionChange(action);
-                            notifier.NotifyAll(action, threadNumber);
-                        }
-                    
+                    if (action instanceof ActionChat) {
+
+                        notifier.NotifyAll(action, threadNumber);
+                    } else {
+                        textEditor.ApplyActionChange(action);
+                        notifier.NotifyAll(action, threadNumber);
+                    }
 
                 } catch (IOException | ClassNotFoundException ex) {
                     // throw ex;

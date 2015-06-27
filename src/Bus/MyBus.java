@@ -15,6 +15,7 @@ import DAO.PartnerDetailsDAO;
 import Pojo.Account;
 import Pojo.Document;
 import Pojo.Invite;
+import Runnables.AnalystMyListAction;
 import Runnables.ClientReceiveThread;
 import Runnables.SuperServerThread;
 import java.io.BufferedWriter;
@@ -26,6 +27,7 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import sun.misc.Queue;
 
 /**
  *
@@ -134,6 +136,14 @@ public class MyBus {
 
     }
 
+    public static Account getAccountByUsername(String username){
+        return AccountDAO.getAccountByUsername(username);
+               
+    }
+    public static boolean insertMemberIntoDocument(String doc_Code, int id_member){
+        return PartnerDetailsDAO.insertMember(doc_Code, id_member);
+    }
+    
     public static boolean rejectInvite(int id) {
         return InviteDAO.deleteInvite(id);
     }
@@ -158,55 +168,35 @@ public class MyBus {
 
     }
 
-    public static boolean analystArrayListAction(ArrayList<Action> lstAction) {
+    public static boolean analystArrayListAction(Queue<Action> lstAction) {
 
         //Split action of each member
         HashMap<String, ArrayList<Action>> items = new HashMap<String, ArrayList<Action>>();
-        for (Action action : lstAction) {
-            String userNameAcc = action.getUserName();
-            if (items.containsKey(userNameAcc)) {
-
-                items.get(userNameAcc).add(action);
-            } else {
-                ArrayList<Action> temp = new ArrayList<>();
-                temp.add(action);
-                items.put(userNameAcc, temp);
+        while(!lstAction.isEmpty()) {
+            try {
+                Action action = lstAction.dequeue();
+                String userNameAcc = action.getUserName();
+                if (items.containsKey(userNameAcc)) {
+                    
+                    items.get(userNameAcc).add(action);
+                } else {
+                    ArrayList<Action> temp = new ArrayList<>();
+                    temp.add(action);
+                    items.put(userNameAcc, temp);
+                }
+            } catch (InterruptedException ex) {
+                Logger.getLogger(MyBus.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         }
         for (String key : items.keySet()) {
 
             ArrayList<Action> myListAction = items.get(key);
-            analystMyListAction(myListAction);
+            AnalystMyListAction analystMyListAction = new AnalystMyListAction(myListAction);
 
         }
         return true;
 
     }
 
-    private static void analystMyListAction(ArrayList<Action> myListAction) {
-        boolean insertFlag = false;
-        for (Action action : myListAction) {
-            
-            String word = "";
-            if(action instanceof ActionInsert && insertFlag ){
-                ActionInsert temp = (ActionInsert) action;
-                if(temp.getContent().length() < 5){
-                    
-                    word += temp.getContent();
-                }
-                else
-                {
-                    
-                }
-            }
-            else
-            {
-                
-                insertFlag = false;
-                
-                
-            }
-        }
-    }
 }

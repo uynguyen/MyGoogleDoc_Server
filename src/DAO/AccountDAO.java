@@ -176,7 +176,7 @@ public class AccountDAO {
 
     }
 
-    static Account getAccountByUsername(String username_receiver) {
+    public static Account getAccountByUsername(String username_receiver) {
         try {
             connectionHelper.openConnection();
             String strSQL = "select * from accounts acc where acc.username = '" + username_receiver + "'";

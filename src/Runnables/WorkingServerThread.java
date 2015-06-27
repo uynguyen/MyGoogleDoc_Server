@@ -56,7 +56,7 @@ public class WorkingServerThread implements Runnable{
                 
                 //create another thread to receive
                 System.out.println(notifier.GetNumber());
-                ClientReceiveThread clientReceiveThread = new ClientReceiveThread(ois, notifier, textEditor, notifier.GetNumber());
+                ClientReceiveThread clientReceiveThread = new ClientReceiveThread(ois, notifier, textEditor, notifier.GetNumber(), documentThread);
                                
                 
                 
