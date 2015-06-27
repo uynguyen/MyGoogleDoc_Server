@@ -16,6 +16,8 @@ import javax.swing.text.AttributeSet;
 public abstract class Action implements Serializable{
     protected int _startPosition;
     protected int _endPosition;
+    protected int _userID;
+    protected String _userName;
       protected AttributeSet _attributeset;
     public Action(AttributeSet attributeset){
         this._attributeset = attributeset;
@@ -66,6 +68,34 @@ public abstract class Action implements Serializable{
      */
     public void setAttributeset(AttributeSet _attributeset) {
         this._attributeset = _attributeset;
+    }
+
+    /**
+     * @return the _userID
+     */
+    public int getUserID() {
+        return _userID;
+    }
+
+    /**
+     * @param _userID the _userID to set
+     */
+    public void setUserID(int _userID) {
+        this._userID = _userID;
+    }
+
+    /**
+     * @return the _userName
+     */
+    public String getUserName() {
+        return _userName;
+    }
+
+    /**
+     * @param _userName the _userName to set
+     */
+    public void setUserName(String _userName) {
+        this._userName = _userName;
     }
 
 }
