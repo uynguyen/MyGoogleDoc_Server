@@ -7,6 +7,7 @@ package Runnables;
 
 import Bus.Global;
 import CommunicatePackage.InvitePackage;
+import Pojo.Document;
 
 /**
  *
@@ -15,19 +16,19 @@ import CommunicatePackage.InvitePackage;
 public class SendPushNotificationThread implements Runnable{
     
     Thread t;
-    InvitePackage invitePackage;
-    String username;
-    
-    public SendPushNotificationThread(InvitePackage invitePackage, String username){
-        this.invitePackage = invitePackage;
-        this.username = username;
+    Document doc;
+    String username;    
+
+    SendPushNotificationThread(String sender, Document doc) {
+        this.doc = doc;
+        this.username = sender;
         t = new Thread(this);
         t.start();
     }
 
     @Override
     public void run() {
-        Global.notificationPusher.Notify(invitePackage, username);
+        Global.notificationPusher.Notify(new InvitePackage(false, username, doc), username);
     }
     
 }
