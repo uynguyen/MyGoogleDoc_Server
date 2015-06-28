@@ -35,6 +35,22 @@ public class NotificationPusher {
     synchronized public void Register(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream, String username){
         clients_in.put(username, objectInputStream);
         clients_out.put(username, objectOutputStream);
+        System.out.println("notification pusher size" + clients_in.size() + "/" + clients_out.size());
+    }
+    
+    
+    synchronized public void Unregister(String username) {
+        try {
+            ObjectOutputStream objectOutputStream = clients_out.get(username);
+            ObjectInputStream objectInputStream = clients_in.get(username);
+            objectInputStream.close();
+            objectOutputStream.flush();
+            objectOutputStream.close();
+            clients_in.remove(username);
+            clients_out.remove(username);
+        } catch (IOException ex) {
+            Logger.getLogger(NotificationPusher.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     synchronized public void Notify(Object message, String username){
@@ -59,4 +75,5 @@ public class NotificationPusher {
             Logger.getLogger(NotificationPusher.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
 }
