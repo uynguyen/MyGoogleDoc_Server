@@ -30,10 +30,12 @@ public class Notifier {
     HashMap<String, ObjectOutputStream> subcribers;
     StyledTextEditorOnServer documentServer = new StyledTextEditorOnServer();
     String document;
+    String docCode;
     StyledTextEditorOnServer textEditor;
 
     public Notifier(String docCode, StyledTextEditorOnServer editor) {
-        textEditor = editor;
+        this.docCode = docCode;
+        this.textEditor = editor;
         document = Bus.MyBus.openDocument(docCode);
         textEditor.setHTMLString(document);
         subcribers = new HashMap<>();
@@ -55,6 +57,9 @@ public class Notifier {
 
     public void Unregister(String username) {
         subcribers.remove(username);
+        if(subcribers.isEmpty()){
+            Global.documentPort.remove(docCode);
+        }
     }
     
     public ObjectOutputStream GetValue(String username){
