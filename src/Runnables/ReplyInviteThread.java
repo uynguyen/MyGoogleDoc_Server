@@ -7,6 +7,7 @@ package Runnables;
 
 import Bus.MyBus;
 import CommunicatePackage.ReplyInvitePackage;
+import Pojo.Document;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -38,13 +39,28 @@ public class ReplyInviteThread implements Runnable {
             boolean result = false;
             if (replyInvitePackage._reply) {
                 result = MyBus.acceptInvite(replyInvitePackage._idInvite, replyInvitePackage._idClient, replyInvitePackage._docCode);
-            } else{
+
+                if (result) {
+                    objectOutputStream.writeObject(Bus.MyBus.getDocumentByCode(replyInvitePackage._docCode));
+                    objectOutputStream.flush();
+                } else {
+                    objectOutputStream.writeObject(new Document(-999, null, null, null, -1, null));
+                    objectOutputStream.flush();
+                }
+
+            } else {
                 result = MyBus.rejectInvite(replyInvitePackage._idInvite);
+                
+                if(result){
+                    objectOutputStream.writeObject(new Document(-1, null, null, null, -1, null));
+                    objectOutputStream.flush();
+                } else {
+                    objectOutputStream.writeObject(new Document(-999, null, null, null, -1, null));
+                    objectOutputStream.flush();
+                }
+                
             }
-            
-            objectOutputStream.writeBoolean(result);
-            objectOutputStream.flush();
-            
+
             objectInputStream.close();
             objectOutputStream.flush();
             objectOutputStream.close();

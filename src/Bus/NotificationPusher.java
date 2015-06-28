@@ -6,6 +6,7 @@
 package Bus;
 
 import CommunicatePackage.InvitePackage;
+import Pojo.Account;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -22,7 +23,21 @@ public class NotificationPusher {
     ConcurrentHashMap<String, ObjectOutputStream> clients_out;
     ConcurrentHashMap<String, ObjectInputStream> clients_in;
     
-    public void Notify(int id, Object message, String username){
+    public NotificationPusher(){
+        clients_in = new ConcurrentHashMap<>();
+        clients_out = new ConcurrentHashMap<>();
+    }
+    
+    public boolean CheckOnline(String username){
+        return clients_in.containsKey(username);
+    }
+    
+    synchronized public void Register(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream, String username){
+        clients_in.put(username, objectInputStream);
+        clients_out.put(username, objectOutputStream);
+    }
+    
+    synchronized public void Notify(Object message, String username){
         try {
             ObjectOutputStream oos = clients_out.get(username);
             ObjectInputStream ois = clients_in.get(username);
@@ -31,9 +46,13 @@ public class NotificationPusher {
             oos.flush();
             
             boolean rs = ois.readBoolean();
-            
+            boolean rs2 = false;
             if(rs){
+                Account temp = MyBus.getAccountByUsername(username);
+                rs2 = MyBus.insertMemberIntoDocument(username, temp.getID());
                 
+                oos.writeBoolean(rs2);
+                oos.flush();                
             }
             
         } catch (IOException ex) {

@@ -68,10 +68,10 @@ public class MyBus {
             boolean checked = renewPassword(username, newPass);
             if (checked) {
                 boolean result = sendEMail.sendEmailForgotPass(emailAddress, newPass);
-                return "success";
+                return "Reset password success!\nPlease check your email!";
 
             } else {
-                return "error";
+                return "Reset password error!\nPlease try again!";
             }
         }
 
@@ -134,6 +134,10 @@ public class MyBus {
         }
         return false;
 
+    }
+    
+    public static String getUsernameByID(int id){
+        return AccountDAO.getUsernameByID(id);
     }
 
     public static Account getAccountByUsername(String username){

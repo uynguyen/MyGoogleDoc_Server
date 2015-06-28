@@ -8,6 +8,7 @@ package Runnables;
 import Bus.Global;
 import Bus.MyBus;
 import CommunicatePackage.CreateDocPackage;
+import CommunicatePackage.CreateDocReturnPackage;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -43,18 +44,19 @@ public class CreateDocThread implements Runnable {
             if (!result.isEmpty()) {
                 //Create listening port
                 ServerSocket server = new ServerSocket(0);
-                int port = server.getLocalPort();
+                int port = server.getLocalPort();                                
                 
                 Global.documentPort.put(result, port);
 
                 //Create workingThread with this port
                 WorkingServerThread workingServerThread = new WorkingServerThread(server, result);
 
-                //Return the working port to client
-                objectOutputStream.writeInt(port);
+                CreateDocReturnPackage pk = new CreateDocReturnPackage(result, port);
+                //Return the package to client
+                objectOutputStream.writeObject(pk);
                 objectOutputStream.flush();
             } else {
-                objectOutputStream.writeInt(-1);
+                objectOutputStream.writeObject(new CreateDocReturnPackage("", -1));
                 objectOutputStream.flush();
             }
             

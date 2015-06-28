@@ -5,6 +5,7 @@
  */
 package Actions;
 
+import java.awt.Color;
 import java.io.Serializable;
 import static javafx.concurrent.WorkerStateEvent.ANY;
 import static javafx.event.ActionEvent.ANY;
@@ -22,7 +23,8 @@ public abstract class Action implements Serializable{
     protected int _endPosition;
     protected int _userID;
     protected String _userName;
-      protected AttributeSet _attributeset;
+    private Color _color;
+    protected AttributeSet _attributeset;
     public Action(AttributeSet attributeset){
         this._attributeset = attributeset;
     }
@@ -100,6 +102,20 @@ public abstract class Action implements Serializable{
      */
     public void setUserName(String _userName) {
         this._userName = _userName;
+    }
+
+    /**
+     * @return the _color
+     */
+    public Color getColor() {
+        return _color;
+    }
+
+    /**
+     * @param _color the _color to set
+     */
+    public void setColor(Color _color) {
+        this._color = _color;
     }
 
 }
