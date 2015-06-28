@@ -59,7 +59,7 @@ public class ClientReceiveThread implements Runnable {
 
                   
                         Actions.Action action = (Actions.Action) objectInputStream.readObject();
-                        System.out.println("Input");
+                     //   System.out.println("Input");
 
                         if (action instanceof ActionChat) {
 
@@ -72,14 +72,14 @@ public class ClientReceiveThread implements Runnable {
 
                 } catch (IOException | ClassNotFoundException ex) {
                     // throw ex;
-                    System.out.println("Exception1");
+                //    System.out.println("Exception1");
                     Logger.getLogger(ClientReceiveThread.class.getName() + t.getName()).log(Level.SEVERE, null, ex);
 
                 }
 
             }
         } catch (IOException | ClassNotFoundException ex) {
-            System.out.println("Exception2");
+           // System.out.println("Exception2");
             Logger.getLogger(ClientReceiveThread.class.getName()).log(Level.SEVERE, null, ex);
         }
 

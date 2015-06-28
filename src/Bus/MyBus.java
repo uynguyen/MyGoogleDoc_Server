@@ -56,10 +56,10 @@ public class MyBus {
             boolean checked = renewPassword(username, newPass);
             if (checked) {
                 boolean result = sendEMail.sendEmailForgotPass(emailAddress, newPass);
-                return "success";
+                return "Reset password success!\nPlease check your email!";
 
             } else {
-                return "error";
+                return "Reset password error!\nPlease try again!";
             }
         }
 

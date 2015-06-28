@@ -34,6 +34,7 @@ public class MySendingEmail {
 
             // creates a new session with an authenticator
             Authenticator auth = new Authenticator() {
+                @Override
                 public PasswordAuthentication getPasswordAuthentication() {
                     return new PasswordAuthentication(CommonConstants._fromUser, CommonConstants._passFromUser);
                 }
