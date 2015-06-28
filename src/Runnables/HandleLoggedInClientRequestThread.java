@@ -5,6 +5,7 @@
  */
 package Runnables;
 
+import Bus.Global;
 import Bus.NotificationPusher;
 import Pojo.EnumUserAction;
 import java.io.IOException;
@@ -21,11 +22,9 @@ import java.util.logging.Logger;
 public class HandleLoggedInClientRequestThread implements Runnable{
     Thread t;
     Socket client;
-    NotificationPusher notificationPusher;
-
+    
     public HandleLoggedInClientRequestThread(Socket client){
-        this.client = client;
-        notificationPusher = new NotificationPusher();
+        this.client = client;        
         t  = new Thread(this);
         t.start();
     }
@@ -47,14 +46,23 @@ public class HandleLoggedInClientRequestThread implements Runnable{
             } else if(flag == EnumUserAction.REPLYINVITE.getValue()){
                 ReplyInviteThread replyInviteThread = new ReplyInviteThread(objectOutputStream, objectInputStream);
             } else if(flag == EnumUserAction.SHARE.getValue()){
-                ShareThread shareThread = new ShareThread(objectOutputStream, objectInputStream, notificationPusher);
+                ShareThread shareThread = new ShareThread(objectOutputStream, objectInputStream, Global.notificationPusher);
             } else if(flag == EnumUserAction.DELETE.getValue()){
                 DeleteThread deleteThread = new DeleteThread(objectOutputStream, objectInputStream);
             } else if(flag == EnumUserAction.LEAVE.getValue()){
                 LeaveThread leaveThread = new LeaveThread(objectOutputStream, objectInputStream);
+            } else if(flag == EnumUserAction.REGISTER_PUSH_SERVICE.getValue()){
+                String username = objectInputStream.readUTF();
+                System.out.println(username + " is now online");
+                Global.notificationPusher.Register(objectOutputStream, objectInputStream, username);
+            } else if(flag == EnumUserAction.WORKING.getValue()){
+                String username = objectInputStream.readUTF();
+                System.out.println(username + " is now working");
+                Global.notificationPusher.Unregister(username);
             } else {
                 String username = objectInputStream.readUTF();
-                notificationPusher.Register(objectOutputStream, objectInputStream, username);
+                System.out.println(username + " is now offline");
+                Global.notificationPusher.Unregister(username);
             }
             
         } catch (IOException ex) {
