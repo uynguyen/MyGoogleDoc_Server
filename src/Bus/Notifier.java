@@ -56,6 +56,10 @@ public class Notifier {
     public void Unregister(String username) {
         subcribers.remove(username);
     }
+    
+    public ObjectOutputStream GetValue(String username){
+        return subcribers.get(username);
+    }
 
     synchronized public void NotifyAll(Object message, String sender) {
         Set set = subcribers.entrySet();

@@ -14,6 +14,7 @@ import CustomComponents.StyledTextEditorOnServer;
 import Pojo.Account;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.lang.instrument.Instrumentation;
 
 import java.util.logging.Level;
@@ -52,19 +53,23 @@ public class ClientReceiveThread implements Runnable {
         notifier.NotifyAll(temp, clientUsername);
         while (true) {
             try {
-                
+
                 Actions.Action action = (Actions.Action) objectInputStream.readObject();
                 if (action instanceof ActionQuit) {
-                    
-                    notifier.NotifyAll(action, clientUsername);
+                    if (((ActionQuit) action).getLeftUser().equalsIgnoreCase(clientUsername)) {
+                        notifier.NotifyAll(action, "");
+                        break;
+                    } else {
+                        notifier.NotifyAll(action, clientUsername);
+                    }
                 } else if (action instanceof ActionChat | action instanceof ActionJoin) {
-                    
+
                     notifier.NotifyAll(action, clientUsername);
                 } else {
                     synchronized (_upDateDocumentThread.getLstAction()) {
                         _upDateDocumentThread.getLstAction().enqueue(action);
                     }
-                    
+
                     System.out.println("Input");
                     textEditor.ApplyActionChange(action);
                     notifier.NotifyAll(action, clientUsername);
@@ -74,9 +79,20 @@ public class ClientReceiveThread implements Runnable {
                 // throw ex;
                 System.out.println("Exception1");
                 Logger.getLogger(ClientReceiveThread.class.getName() + t.getName()).log(Level.SEVERE, null, ex);
-                
+                break;
             }
 
+        }
+
+        try {
+            ObjectOutputStream oos = notifier.GetValue(clientUsername);
+            oos.flush();
+            oos.close();
+            objectInputStream.close();
+            System.out.println(clientUsername + "left");
+            notifier.Unregister(clientUsername);
+        } catch (IOException ex) {
+            Logger.getLogger(ClientReceiveThread.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
