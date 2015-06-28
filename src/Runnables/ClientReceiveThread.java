@@ -55,7 +55,7 @@ public class ClientReceiveThread implements Runnable {
             try {
 
                 Actions.Action action = (Actions.Action) objectInputStream.readObject();
-                     //   System.out.println("Input");
+                if (action instanceof ActionQuit) {
                     if (((ActionQuit) action).getLeftUser().equalsIgnoreCase(clientUsername)) {
                         notifier.NotifyAll(action, "");
                         break;
@@ -70,21 +70,21 @@ public class ClientReceiveThread implements Runnable {
                         _upDateDocumentThread.getLstAction().enqueue(action);
                     }
 
-                    System.out.println("Input");
+                   // System.out.println("Input");
                     textEditor.ApplyActionChange(action);
                     notifier.NotifyAll(action, clientUsername);
                 }
 
             } catch (IOException | ClassNotFoundException ex) {
                 // throw ex;
-                //    System.out.println("Exception1");
+               // System.out.println("Exception1");
                 Logger.getLogger(ClientReceiveThread.class.getName() + t.getName()).log(Level.SEVERE, null, ex);
                 break;
             }
 
         }
 
-           // System.out.println("Exception2");
+        try {
             ObjectOutputStream oos = notifier.GetValue(clientUsername);
             oos.flush();
             oos.close();
