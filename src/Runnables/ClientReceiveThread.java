@@ -9,6 +9,7 @@ import Bus.Notifier;
 import Actions.Action;
 import Actions.ActionChat;
 import Actions.ActionJoin;
+import Actions.ActionQuit;
 import CustomComponents.StyledTextEditorOnServer;
 import Pojo.Account;
 import java.io.IOException;
@@ -28,18 +29,17 @@ public class ClientReceiveThread implements Runnable {
     Thread t;
     ObjectInputStream objectInputStream;
     Notifier notifier;
-    Account clientInfo;
 
     StyledTextEditorOnServer textEditor;
-    int threadNumber;
+    String clientUsername;
     Instrumentation instrumentation;
     UpdateDocumentThread _upDateDocumentThread;
 
-    public ClientReceiveThread(ObjectInputStream is, Notifier notifier, StyledTextEditorOnServer steos, int threadNumber, UpdateDocumentThread updateDocumentThread) {
+    public ClientReceiveThread(ObjectInputStream is, Notifier notifier, StyledTextEditorOnServer steos, String clientUsername, UpdateDocumentThread updateDocumentThread) {
         objectInputStream = is;
         this.notifier = notifier;
         this.textEditor = steos;
-        this.threadNumber = threadNumber;
+        this.clientUsername = clientUsername;
         this._upDateDocumentThread = updateDocumentThread;
         t = new Thread(this);
         t.start();
@@ -47,45 +47,36 @@ public class ClientReceiveThread implements Runnable {
 
     @Override
     public void run() {
-        try {
-            //receive client information
-            clientInfo = (Account) objectInputStream.readObject();
-            System.out.println(clientInfo.getID() + ": " + clientInfo.getUsername());
-
-            ActionJoin temp = new ActionJoin(null);
-            temp.setUsername(clientInfo.getUsername());
-            notifier.NotifyAll(temp, threadNumber);
-
-            //receive action
-            while (true) {
-                try {
-
-                    Actions.Action action = (Actions.Action) objectInputStream.readObject();
+        ActionJoin temp = new ActionJoin(null);
+        temp.setUsername(clientUsername);
+        notifier.NotifyAll(temp, clientUsername);
+        while (true) {
+            try {
+                
+                Actions.Action action = (Actions.Action) objectInputStream.readObject();
+                if (action instanceof ActionQuit) {
+                    
+                    notifier.NotifyAll(action, clientUsername);
+                } else if (action instanceof ActionChat | action instanceof ActionJoin) {
+                    
+                    notifier.NotifyAll(action, clientUsername);
+                } else {
                     synchronized (_upDateDocumentThread.getLstAction()) {
                         _upDateDocumentThread.getLstAction().enqueue(action);
                     }
-
+                    
                     System.out.println("Input");
-
-                    if (action instanceof ActionChat) {
-
-                        notifier.NotifyAll(action, threadNumber);
-                    } else {
-                        textEditor.ApplyActionChange(action);
-                        notifier.NotifyAll(action, threadNumber);
-                    }
-
-                } catch (IOException | ClassNotFoundException ex) {
-                    // throw ex;
-                    System.out.println("Exception1");
-                    Logger.getLogger(ClientReceiveThread.class.getName() + t.getName()).log(Level.SEVERE, null, ex);
-
+                    textEditor.ApplyActionChange(action);
+                    notifier.NotifyAll(action, clientUsername);
                 }
 
+            } catch (IOException | ClassNotFoundException ex) {
+                // throw ex;
+                System.out.println("Exception1");
+                Logger.getLogger(ClientReceiveThread.class.getName() + t.getName()).log(Level.SEVERE, null, ex);
+                
             }
-        } catch (IOException | ClassNotFoundException ex) {
-            System.out.println("Exception2");
-            Logger.getLogger(ClientReceiveThread.class.getName()).log(Level.SEVERE, null, ex);
+
         }
 
     }

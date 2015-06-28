@@ -43,7 +43,7 @@ public class CreateDocThread implements Runnable {
             if (!result.isEmpty()) {
                 //Create listening port
                 ServerSocket server = new ServerSocket(0);
-                int port = server.getLocalPort();
+                int port = server.getLocalPort();                                
                 
                 Global.documentPort.put(result, port);
 

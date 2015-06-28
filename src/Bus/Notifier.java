@@ -11,7 +11,13 @@ import CustomComponents.StyledTextEditorOnServer;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,7 +27,7 @@ import java.util.logging.Logger;
  */
 public class Notifier {
 
-    List<ObjectOutputStream> subcribers;
+    HashMap<String, ObjectOutputStream> subcribers;
     StyledTextEditorOnServer documentServer = new StyledTextEditorOnServer();
     String document;
     StyledTextEditorOnServer textEditor;
@@ -30,16 +36,16 @@ public class Notifier {
         textEditor = editor;
         document = Bus.MyBus.openDocument(docCode);
         textEditor.setHTMLString(document);
-        subcribers = new ArrayList<ObjectOutputStream>();
+        subcribers = new HashMap<>();
     }
 
     public int GetNumber() {
         return subcribers.size();
     }
 
-    public void Register(ObjectOutputStream os) {
+    public void Register(String username, ObjectOutputStream os) {
         try {
-            subcribers.add(os);
+            subcribers.put(username, os);
             os.writeUTF(textEditor.getHTMLString());
             os.flush();
         } catch (IOException ex) {
@@ -47,28 +53,23 @@ public class Notifier {
         }
     }
 
-    synchronized public void NotifyAll(Object message, int sender) {
-        for (int i = 0; i < subcribers.size(); i++) {
-            if (i != sender) {
+    public void Unregister(String username) {
+        subcribers.remove(username);
+    }
+
+    synchronized public void NotifyAll(Object message, String sender) {
+        Set set = subcribers.entrySet();
+        set.forEach((Object t) -> {
+            Entry<String, ObjectOutputStream> entry = (Entry<String, ObjectOutputStream>) t;
+            if (!entry.getKey().equalsIgnoreCase(sender)) {
                 try {
-                    ObjectOutputStream os = subcribers.get(i);
+                    ObjectOutputStream os = entry.getValue();
                     os.writeObject(message);
                     os.flush();
                 } catch (IOException ex) {
                     Logger.getLogger(Notifier.class.getName()).log(Level.SEVERE, null, ex);
-                    CloseConnection(i);                    
                 }
             }
-        }
-    }
-
-    private void CloseConnection(int i) {
-        try {
-            subcribers.get(i).flush();
-            subcribers.get(i).close();
-            subcribers.remove(i);
-        } catch (IOException ex) {
-            Logger.getLogger(Notifier.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        });
     }
 }
