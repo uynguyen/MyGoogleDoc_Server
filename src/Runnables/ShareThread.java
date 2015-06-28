@@ -5,6 +5,7 @@
  */
 package Runnables;
 
+import Bus.Global;
 import Bus.MyBus;
 import Bus.NotificationPusher;
 import CommunicatePackage.InvitePackage;
@@ -27,12 +28,10 @@ public class ShareThread implements Runnable {
     Thread t;
     ObjectOutputStream objectOutputStream;
     ObjectInputStream objectInputStream;
-    NotificationPusher notificationPusher;
 
-    public ShareThread(ObjectOutputStream output, ObjectInputStream input, NotificationPusher notificationPusher) {
+    public ShareThread(ObjectOutputStream output, ObjectInputStream input) {
         this.objectInputStream = input;
         this.objectOutputStream = output;
-        this.notificationPusher = notificationPusher;
         t = new Thread(this);
         t.start();
     }
@@ -43,10 +42,10 @@ public class ShareThread implements Runnable {
             boolean result = true;
             SharePackage sharePackage = (SharePackage) objectInputStream.readObject();
 
-            if (notificationPusher.CheckOnline(sharePackage.username)) {
+            if (Global.notificationPusher.CheckOnline(sharePackage.username)) {
                 String sender = MyBus.getUsernameByID(sharePackage.idClient);
                 Document doc = MyBus.getDocumentByCode(sharePackage.docCode);
-                notificationPusher.Notify(new InvitePackage(false, sender,doc), sharePackage.username);
+                SendPushNotificationThread sendPush = new SendPushNotificationThread(new InvitePackage(false, sender,doc) , sender);                
             } else {
                 result = Bus.MyBus.shareDocument(sharePackage.docCode, sharePackage.idClient, sharePackage.username);
             }
