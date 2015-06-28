@@ -33,14 +33,14 @@ public class ClientReceiveThread implements Runnable {
     StyledTextEditorOnServer textEditor;
     int threadNumber;
     Instrumentation instrumentation;
-    UpdateDocumentThread _upDateDocumentThread;
+  //  UpdateDocumentThread _upDateDocumentThread;
 
-    public ClientReceiveThread(ObjectInputStream is, Notifier notifier, StyledTextEditorOnServer steos, int threadNumber, UpdateDocumentThread updateDocumentThread) {
+    public ClientReceiveThread(ObjectInputStream is, Notifier notifier, StyledTextEditorOnServer steos, int threadNumber) {
         objectInputStream = is;
         this.notifier = notifier;
         this.textEditor = steos;
         this.threadNumber = threadNumber;
-        this._upDateDocumentThread = updateDocumentThread;
+       // this._upDateDocumentThread = updateDocumentThread;
         t = new Thread(this);
         t.start();
     }
@@ -61,9 +61,9 @@ public class ClientReceiveThread implements Runnable {
                 try {
 
                     Actions.Action action = (Actions.Action) objectInputStream.readObject();
-                    synchronized (_upDateDocumentThread.getLstAction()) {
-                        _upDateDocumentThread.getLstAction().enqueue(action);
-                    }
+//                    synchronized (_upDateDocumentThread.getLstAction()) {
+//                        _upDateDocumentThread.getLstAction().enqueue(action);
+//                    }
 
                     System.out.println("Input");
 

@@ -43,14 +43,14 @@ public class UpdateDocumentThread implements Runnable {
 
                 Thread.sleep(_interval * 1000);
                 MyBus.updateDocument(_docCode, _editor.getHTMLString());
-                Queue<Action> temp = new Queue<>();
-                while (!_lstAction.isEmpty()) {
-                    System.out.println("222222222222");
-                    temp.enqueue(_lstAction.dequeue());
-                }
-                //synchronized(_lstAction){
-                MyBus.analystArrayListAction(temp);
-                //}
+//                Queue<Action> temp = new Queue<>();
+//                while (!_lstAction.isEmpty()) {
+//                    System.out.println("222222222222");
+//                    temp.enqueue(_lstAction.dequeue());
+//                }
+//                //synchronized(_lstAction){
+//                MyBus.analystArrayListAction(temp);
+//                //}
 
             } catch (InterruptedException ex) {
                 Logger.getLogger(UpdateDocumentThread.class.getName()).log(Level.SEVERE, null, ex);
