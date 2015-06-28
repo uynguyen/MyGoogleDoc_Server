@@ -35,7 +35,7 @@ public class OpenDocThread implements Runnable{
         try {
             //Receive doc id to open
 
-            String docCode = objectInputStream.readUTF();
+            String docCode= objectInputStream.readUTF();
 
             if(Global.documentPort.containsKey(docCode) == false){
                 //open usable port

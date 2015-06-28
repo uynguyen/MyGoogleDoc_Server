@@ -5,17 +5,21 @@
  */
 package Runnables;
 
+import Bus.Notifier;
 import Actions.Action;
 import Actions.ActionChat;
 import Actions.ActionJoin;
+import Actions.ActionQuit;
 import CustomComponents.StyledTextEditorOnServer;
 import Pojo.Account;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.lang.instrument.Instrumentation;
-import java.util.Stack;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import sun.misc.Queue;
 
 /**
  *
@@ -26,60 +30,68 @@ public class ClientReceiveThread implements Runnable {
     Thread t;
     ObjectInputStream objectInputStream;
     Notifier notifier;
-    Account clientInfo;
-    Stack<Action> actionStack;
-    StyledTextEditorOnServer textEditor;
-    int threadNumber;
-    Instrumentation instrumentation;
 
-    public ClientReceiveThread(ObjectInputStream is, Notifier notifier, StyledTextEditorOnServer steos, int threadNumber) {
+    StyledTextEditorOnServer textEditor;
+    String clientUsername;
+    Instrumentation instrumentation;
+    UpdateDocumentThread _upDateDocumentThread;
+
+    public ClientReceiveThread(ObjectInputStream is, Notifier notifier, StyledTextEditorOnServer steos, String clientUsername, UpdateDocumentThread updateDocumentThread) {
         objectInputStream = is;
         this.notifier = notifier;
         this.textEditor = steos;
-        this.threadNumber = threadNumber;
-        actionStack = new Stack<>();
+        this.clientUsername = clientUsername;
+        this._upDateDocumentThread = updateDocumentThread;
         t = new Thread(this);
         t.start();
     }
 
     @Override
     public void run() {
-        try {
-            //receive client information
-            clientInfo = (Account) objectInputStream.readObject();
-            System.out.println(clientInfo.getID() + ": " + clientInfo.getUsername());
+        ActionJoin temp = new ActionJoin(null);
+        temp.setUsername(clientUsername);
+        notifier.NotifyAll(temp, clientUsername);
+        while (true) {
+            try {
 
-            ActionJoin temp = new ActionJoin(null);
-            temp.setUsername(clientInfo.getUsername());
-            notifier.NotifyAll(temp, threadNumber);
-
-            //receive action
-            while (true) {
-                try {
-
-                  
-                        Actions.Action action = (Actions.Action) objectInputStream.readObject();
+                Actions.Action action = (Actions.Action) objectInputStream.readObject();
                      //   System.out.println("Input");
+                    if (((ActionQuit) action).getLeftUser().equalsIgnoreCase(clientUsername)) {
+                        notifier.NotifyAll(action, "");
+                        break;
+                    } else {
+                        notifier.NotifyAll(action, clientUsername);
+                    }
+                } else if (action instanceof ActionChat | action instanceof ActionJoin) {
 
-                        if (action instanceof ActionChat) {
+                    notifier.NotifyAll(action, clientUsername);
+                } else {
+                    synchronized (_upDateDocumentThread.getLstAction()) {
+                        _upDateDocumentThread.getLstAction().enqueue(action);
+                    }
 
-                            notifier.NotifyAll(action, threadNumber);
-                        } else {
-                             textEditor.ApplyActionChange(action);
-                            notifier.NotifyAll(action, threadNumber);
-                        }
-                    
-
-                } catch (IOException | ClassNotFoundException ex) {
-                    // throw ex;
-                //    System.out.println("Exception1");
-                    Logger.getLogger(ClientReceiveThread.class.getName() + t.getName()).log(Level.SEVERE, null, ex);
-
+                    System.out.println("Input");
+                    textEditor.ApplyActionChange(action);
+                    notifier.NotifyAll(action, clientUsername);
                 }
 
+            } catch (IOException | ClassNotFoundException ex) {
+                // throw ex;
+                //    System.out.println("Exception1");
+                Logger.getLogger(ClientReceiveThread.class.getName() + t.getName()).log(Level.SEVERE, null, ex);
+                break;
             }
-        } catch (IOException | ClassNotFoundException ex) {
+
+        }
+
            // System.out.println("Exception2");
+            ObjectOutputStream oos = notifier.GetValue(clientUsername);
+            oos.flush();
+            oos.close();
+            objectInputStream.close();
+            System.out.println(clientUsername + "left");
+            notifier.Unregister(clientUsername);
+        } catch (IOException ex) {
             Logger.getLogger(ClientReceiveThread.class.getName()).log(Level.SEVERE, null, ex);
         }
 

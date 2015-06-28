@@ -5,6 +5,8 @@
  */
 package Bus;
 
+import Actions.Action;
+import Actions.ActionInsert;
 import DAO.AccountDAO;
 import DAO.CollaborationDAO;
 import DAO.DocumentDAO;
@@ -13,9 +15,19 @@ import DAO.PartnerDetailsDAO;
 import Pojo.Account;
 import Pojo.Document;
 import Pojo.Invite;
+import Runnables.AnalystMyListAction;
+import Runnables.ClientReceiveThread;
 import Runnables.SuperServerThread;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import sun.misc.Queue;
 
 /**
  *
@@ -123,13 +135,72 @@ public class MyBus {
         return false;
 
     }
+    
+    public static String getUsernameByID(int id){
+        return AccountDAO.getUsernameByID(id);
+    }
 
+    public static Account getAccountByUsername(String username){
+        return AccountDAO.getAccountByUsername(username);
+               
+    }
+    public static boolean insertMemberIntoDocument(String doc_Code, int id_member){
+        return PartnerDetailsDAO.insertMember(doc_Code, id_member);
+    }
+    
     public static boolean rejectInvite(int id) {
         return InviteDAO.deleteInvite(id);
     }
-    
-    
-    public static Document getDocumentByCode(String doc_Code){
+
+    public static Document getDocumentByCode(String doc_Code) {
         return DocumentDAO.getDocumentByCode(doc_Code);
     }
+
+    public static boolean updateDocument(String _docCode, String _content) {
+        String path = MyBus.getDocumentByCode(_docCode).getPath();
+        try {
+            PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(path)));
+
+            out.print(_content);
+
+            out.close();
+            return true;
+        } catch (IOException e) {
+            Logger.getLogger(MyBus.class.getName()).log(Level.SEVERE, null, e);
+            return false;
+        }
+
+    }
+
+    public static boolean analystArrayListAction(Queue<Action> lstAction) {
+
+        //Split action of each member
+        HashMap<String, ArrayList<Action>> items = new HashMap<String, ArrayList<Action>>();
+        while(!lstAction.isEmpty()) {
+            try {
+                Action action = lstAction.dequeue();
+                String userNameAcc = action.getUserName();
+                if (items.containsKey(userNameAcc)) {
+                    
+                    items.get(userNameAcc).add(action);
+                } else {
+                    ArrayList<Action> temp = new ArrayList<>();
+                    temp.add(action);
+                    items.put(userNameAcc, temp);
+                }
+            } catch (InterruptedException ex) {
+                Logger.getLogger(MyBus.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+        for (String key : items.keySet()) {
+
+            ArrayList<Action> myListAction = items.get(key);
+            AnalystMyListAction analystMyListAction = new AnalystMyListAction(myListAction);
+
+        }
+        return true;
+
+    }
+
 }
