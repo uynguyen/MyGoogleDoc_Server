@@ -63,7 +63,7 @@ public class WorkingServerThread implements Runnable {
                 notifier.Register(clientInfo.getUsername(), oos);
 
                 //create another thread to receive         
-                ClientReceiveThread clientReceiveThread = new ClientReceiveThread(ois, notifier, textEditor, clientInfo.getUsername(), documentThread);
+                ClientReceiveThread clientReceiveThread = new ClientReceiveThread(ois, notifier, textEditor, clientInfo.getUsername());
 
             } catch (IOException | ClassNotFoundException ex) {
                 Logger.getLogger(WorkingServerThread.class.getName()).log(Level.SEVERE, null, ex);

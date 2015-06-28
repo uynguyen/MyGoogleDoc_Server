@@ -14,9 +14,7 @@ import javax.swing.text.AttributeSet;
  * @author UyNguyen.ITUS
  */
 public class ActionJoin extends Action implements Serializable{
-    
-     private static final long serialVersionUID = 3L;
-
+ private static final long serialVersionUID = 3L;
     private String _username;
     
     public ActionJoin(AttributeSet attributeset) {

@@ -34,14 +34,14 @@ public class ClientReceiveThread implements Runnable {
     StyledTextEditorOnServer textEditor;
     String clientUsername;
     Instrumentation instrumentation;
-    UpdateDocumentThread _upDateDocumentThread;
 
-    public ClientReceiveThread(ObjectInputStream is, Notifier notifier, StyledTextEditorOnServer steos, String clientUsername, UpdateDocumentThread updateDocumentThread) {
+
+    public ClientReceiveThread(ObjectInputStream is, Notifier notifier, StyledTextEditorOnServer steos, String clientUsername) {
         objectInputStream = is;
         this.notifier = notifier;
         this.textEditor = steos;
         this.clientUsername = clientUsername;
-        this._upDateDocumentThread = updateDocumentThread;
+
         t = new Thread(this);
         t.start();
     }
@@ -66,9 +66,7 @@ public class ClientReceiveThread implements Runnable {
 
                     notifier.NotifyAll(action, clientUsername);
                 } else {
-                    synchronized (_upDateDocumentThread.getLstAction()) {
-                        _upDateDocumentThread.getLstAction().enqueue(action);
-                    }
+    
 
                    // System.out.println("Input");
                     textEditor.ApplyActionChange(action);

@@ -24,10 +24,11 @@ public class ActionQuit extends Action{
     public void onDraw(JTextPane textPane) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    
+
     public String getLeftUser() {
         return leftUser;
     }
+    
+    
     
 }

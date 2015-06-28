@@ -7,8 +7,6 @@ package Actions;
 
 import java.awt.Color;
 import java.io.Serializable;
-import static javafx.concurrent.WorkerStateEvent.ANY;
-import static javafx.event.ActionEvent.ANY;
 import javax.swing.JTextPane;
 import javax.swing.text.AttributeSet;
 
@@ -17,7 +15,6 @@ import javax.swing.text.AttributeSet;
  * @author UyNguyen.ITUS
  */
 public abstract class Action implements Serializable{
-     
     private static final long serialVersionUID = 1L;
     protected int _startPosition;
     protected int _endPosition;
