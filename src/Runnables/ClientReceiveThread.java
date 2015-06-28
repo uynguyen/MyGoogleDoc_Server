@@ -86,9 +86,9 @@ public class ClientReceiveThread implements Runnable {
 
         try {
             ObjectOutputStream oos = notifier.GetValue(clientUsername);
-            oos.flush();
-            oos.close();
             objectInputStream.close();
+            oos.flush();
+            oos.close();            
             System.out.println(clientUsername + "left");
             notifier.Unregister(clientUsername);
         } catch (IOException ex) {

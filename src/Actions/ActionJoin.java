@@ -5,6 +5,7 @@
  */
 package Actions;
 
+import java.io.Serializable;
 import javax.swing.JTextPane;
 import javax.swing.text.AttributeSet;
 
@@ -12,7 +13,9 @@ import javax.swing.text.AttributeSet;
  *
  * @author UyNguyen.ITUS
  */
-public class ActionJoin extends Action{
+public class ActionJoin extends Action implements Serializable{
+    
+     private static final long serialVersionUID = 3L;
 
     private String _username;
     
