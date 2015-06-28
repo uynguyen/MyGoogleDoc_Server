@@ -5,6 +5,7 @@
  */
 package Actions;
 
+import EditorKits.AdvancedHTMLEditorKit;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
@@ -13,6 +14,8 @@ import java.util.logging.Logger;
 import javax.swing.JTextPane;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.html.HTML;
+import javax.swing.text.html.HTMLDocument;
 
 /**
  *
@@ -31,12 +34,26 @@ public class ActionInsert extends Action implements Serializable {
 
     @Override
     public void onDraw(JTextPane textPane) {
-        System.err.println("Insert: " + _startPosition + "=" + _Content + "[" + _Content.length() + "]");
-        try {
-            if (_startPosition > textPane.getStyledDocument().getEndPosition().getOffset()) {
-                _startPosition = textPane.getStyledDocument().getEndPosition().getOffset();
+        System.err.println("Insert: " + _startPosition + "=" + _Content + "[" + (int)_Content.charAt(0) + "]");
+        if ((int)_Content.charAt(0) == 10 || (int)_Content.charAt(0) == 13)
+        {
+            if (_startPosition > textPane.getDocument().getLength())
+                _startPosition = textPane.getDocument().getLength();
+     
+            try {
+                ((AdvancedHTMLEditorKit)textPane.getEditorKit()).insertHTML(
+                        (HTMLDocument)textPane.getStyledDocument(),
+                        _startPosition, "<br/>", 0, 0, HTML.Tag.BR);
+            } catch (BadLocationException | IOException ex) {
+                Logger.getLogger(ActionInsert.class.getName()).log(Level.SEVERE, null, ex);
             }
-            textPane.getStyledDocument().insertString(_startPosition, getContent(), _attributeset);
+        }
+        else
+        try {
+            if (_startPosition > textPane.getDocument().getLength())
+                _startPosition = textPane.getDocument().getLength();
+            textPane.getDocument().insertString(_startPosition, _Content
+                    , _attributeset); 
         } catch (BadLocationException ex) {
             Logger.getLogger(ActionInsert.class.getName()).log(Level.SEVERE, null, ex);
         }

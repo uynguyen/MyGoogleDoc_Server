@@ -14,8 +14,10 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.Document;
 import javax.swing.text.html.HTMLDocument;
+import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.rtf.RTFEditorKit;
 
 /**
@@ -33,7 +35,7 @@ public final class StyledTextEditorOnServer extends javax.swing.JPanel {
         textPane.setMargin(new Insets(50, 50, 50, 50));
 
         NewDocument();
-
+     //   textPane.getDocument().putProperty(HTMLEditorKit.EndOfLineStringProperty, "<br/>\n");
     }
 
   synchronized public void ApplyActionChange(Actions.Action action){
@@ -68,26 +70,9 @@ public final class StyledTextEditorOnServer extends javax.swing.JPanel {
         textPane.setText(src);
     }
 
-    public String getRTFString() {
-        String strResult = "";
-        try {
-            RTFEditorKit kit = new RTFEditorKit();
-            Document d = textPane.getStyledDocument();
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            kit.write(baos, d, d.getStartPosition().getOffset(), d.getLength());
-            strResult = baos.toString(StandardCharsets.UTF_8.name());
-        } catch (IOException | BadLocationException ex) {
-        }
-        return strResult;
-    }
+   
 
-    public void setRTFString(String src) {
-        RTFEditorKit kit = new AdvancedRTFEditorKit();
-        textPane.setEditorKit(kit);
-        textPane.setDocument(kit.createDefaultDocument());
-        textPane.setText(src);
-    }
-
+  
 
     /**
      * This method is called from within the constructor to initialize the form.
