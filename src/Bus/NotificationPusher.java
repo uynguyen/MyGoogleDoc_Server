@@ -43,8 +43,11 @@ public class NotificationPusher {
         try {
             ObjectOutputStream objectOutputStream = clients_out.get(username);
             ObjectInputStream objectInputStream = clients_in.get(username);
-            objectInputStream.close();
+                        
+            objectOutputStream.writeObject(new InvitePackage(true, null, null));
             objectOutputStream.flush();
+            
+            objectInputStream.close();                        
             objectOutputStream.close();
             clients_in.remove(username);
             clients_out.remove(username);

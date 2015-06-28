@@ -46,7 +46,7 @@ public class HandleLoggedInClientRequestThread implements Runnable{
             } else if(flag == EnumUserAction.REPLYINVITE.getValue()){
                 ReplyInviteThread replyInviteThread = new ReplyInviteThread(objectOutputStream, objectInputStream);
             } else if(flag == EnumUserAction.SHARE.getValue()){
-                ShareThread shareThread = new ShareThread(objectOutputStream, objectInputStream, Global.notificationPusher);
+                ShareThread shareThread = new ShareThread(objectOutputStream, objectInputStream);
             } else if(flag == EnumUserAction.DELETE.getValue()){
                 DeleteThread deleteThread = new DeleteThread(objectOutputStream, objectInputStream);
             } else if(flag == EnumUserAction.LEAVE.getValue()){
