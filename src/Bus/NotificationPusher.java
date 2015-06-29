@@ -68,7 +68,7 @@ public class NotificationPusher {
             boolean rs2 = false;
             if(rs){
                 Account temp = MyBus.getAccountByUsername(username);
-                rs2 = MyBus.insertMemberIntoDocument(username, temp.getID());
+                rs2 = MyBus.insertMemberIntoDocument(invitePackage.document.getCode(), temp.getID());
                 
                 oos.writeBoolean(rs2);
                 oos.flush();                
