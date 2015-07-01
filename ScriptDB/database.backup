@@ -1,0 +1,517 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.4.1
+-- Dumped by pg_dump version 9.4.1
+-- Started on 2015-05-30 17:58:21
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+DROP DATABASE mygoogledocs;
+--
+-- TOC entry 2054 (class 1262 OID 25813)
+-- Name: mygoogledocs; Type: DATABASE; Schema: -; Owner: postgres
+--
+
+CREATE DATABASE mygoogledocs WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'Vietnamese_Vietnam.1258' LC_CTYPE = 'Vietnamese_Vietnam.1258';
+
+
+ALTER DATABASE mygoogledocs OWNER TO postgres;
+
+\connect mygoogledocs
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- TOC entry 5 (class 2615 OID 2200)
+-- Name: public; Type: SCHEMA; Schema: -; Owner: postgres
+--
+
+CREATE SCHEMA public;
+
+
+ALTER SCHEMA public OWNER TO postgres;
+
+--
+-- TOC entry 2055 (class 0 OID 0)
+-- Dependencies: 5
+-- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: postgres
+--
+
+COMMENT ON SCHEMA public IS 'standard public schema';
+
+
+--
+-- TOC entry 182 (class 3079 OID 11855)
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 2057 (class 0 OID 0)
+-- Dependencies: 182
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 172 (class 1259 OID 25820)
+-- Name: accounts; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE accounts (
+    "ID" integer NOT NULL,
+    "UserName" text,
+    "Password" text,
+    "Avatar" text,
+    "Email" text
+);
+
+
+ALTER TABLE accounts OWNER TO postgres;
+
+--
+-- TOC entry 173 (class 1259 OID 25856)
+-- Name: accounts_ID_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE "accounts_ID_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE "accounts_ID_seq" OWNER TO postgres;
+
+--
+-- TOC entry 2058 (class 0 OID 0)
+-- Dependencies: 173
+-- Name: accounts_ID_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE "accounts_ID_seq" OWNED BY accounts."ID";
+
+
+--
+-- TOC entry 179 (class 1259 OID 25983)
+-- Name: documents; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE documents (
+    "ID" integer NOT NULL,
+    "Name" text,
+    "Path" text,
+    "DateCreate" date,
+    "IDOwner" integer,
+    "IDPartners" integer
+);
+
+
+ALTER TABLE documents OWNER TO postgres;
+
+--
+-- TOC entry 178 (class 1259 OID 25981)
+-- Name: documents_ID_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE "documents_ID_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE "documents_ID_seq" OWNER TO postgres;
+
+--
+-- TOC entry 2059 (class 0 OID 0)
+-- Dependencies: 178
+-- Name: documents_ID_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE "documents_ID_seq" OWNED BY documents."ID";
+
+
+--
+-- TOC entry 181 (class 1259 OID 26014)
+-- Name: history; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE history (
+    "ID" integer NOT NULL,
+    "User" text,
+    "Content" text,
+    "DateTime" date,
+    "Action" text,
+    "ChangePosition" text
+);
+
+
+ALTER TABLE history OWNER TO postgres;
+
+--
+-- TOC entry 180 (class 1259 OID 26012)
+-- Name: history_ID_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE "history_ID_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE "history_ID_seq" OWNER TO postgres;
+
+--
+-- TOC entry 2060 (class 0 OID 0)
+-- Dependencies: 180
+-- Name: history_ID_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE "history_ID_seq" OWNED BY history."ID";
+
+
+--
+-- TOC entry 177 (class 1259 OID 25912)
+-- Name: listfriends; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE listfriends (
+    "ID" integer NOT NULL,
+    "User" text,
+    "Friend" text
+);
+
+
+ALTER TABLE listfriends OWNER TO postgres;
+
+--
+-- TOC entry 176 (class 1259 OID 25910)
+-- Name: listfriends_ID_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE "listfriends_ID_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE "listfriends_ID_seq" OWNER TO postgres;
+
+--
+-- TOC entry 2061 (class 0 OID 0)
+-- Dependencies: 176
+-- Name: listfriends_ID_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE "listfriends_ID_seq" OWNED BY listfriends."ID";
+
+
+--
+-- TOC entry 175 (class 1259 OID 25899)
+-- Name: partnerdetails; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE partnerdetails (
+    "ID" integer NOT NULL,
+    "IDGroup" integer,
+    "IDMember" integer
+);
+
+
+ALTER TABLE partnerdetails OWNER TO postgres;
+
+--
+-- TOC entry 174 (class 1259 OID 25897)
+-- Name: partnerdetails_ID_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE "partnerdetails_ID_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE "partnerdetails_ID_seq" OWNER TO postgres;
+
+--
+-- TOC entry 2062 (class 0 OID 0)
+-- Dependencies: 174
+-- Name: partnerdetails_ID_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE "partnerdetails_ID_seq" OWNED BY partnerdetails."ID";
+
+
+--
+-- TOC entry 1909 (class 2604 OID 25858)
+-- Name: ID; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY accounts ALTER COLUMN "ID" SET DEFAULT nextval('"accounts_ID_seq"'::regclass);
+
+
+--
+-- TOC entry 1912 (class 2604 OID 25986)
+-- Name: ID; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY documents ALTER COLUMN "ID" SET DEFAULT nextval('"documents_ID_seq"'::regclass);
+
+
+--
+-- TOC entry 1913 (class 2604 OID 26017)
+-- Name: ID; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY history ALTER COLUMN "ID" SET DEFAULT nextval('"history_ID_seq"'::regclass);
+
+
+--
+-- TOC entry 1911 (class 2604 OID 25915)
+-- Name: ID; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY listfriends ALTER COLUMN "ID" SET DEFAULT nextval('"listfriends_ID_seq"'::regclass);
+
+
+--
+-- TOC entry 1910 (class 2604 OID 25902)
+-- Name: ID; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY partnerdetails ALTER COLUMN "ID" SET DEFAULT nextval('"partnerdetails_ID_seq"'::regclass);
+
+
+--
+-- TOC entry 2040 (class 0 OID 25820)
+-- Dependencies: 172
+-- Data for Name: accounts; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- TOC entry 2063 (class 0 OID 0)
+-- Dependencies: 173
+-- Name: accounts_ID_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('"accounts_ID_seq"', 1, false);
+
+
+--
+-- TOC entry 2047 (class 0 OID 25983)
+-- Dependencies: 179
+-- Data for Name: documents; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- TOC entry 2064 (class 0 OID 0)
+-- Dependencies: 178
+-- Name: documents_ID_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('"documents_ID_seq"', 1, false);
+
+
+--
+-- TOC entry 2049 (class 0 OID 26014)
+-- Dependencies: 181
+-- Data for Name: history; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- TOC entry 2065 (class 0 OID 0)
+-- Dependencies: 180
+-- Name: history_ID_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('"history_ID_seq"', 1, false);
+
+
+--
+-- TOC entry 2045 (class 0 OID 25912)
+-- Dependencies: 177
+-- Data for Name: listfriends; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- TOC entry 2066 (class 0 OID 0)
+-- Dependencies: 176
+-- Name: listfriends_ID_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('"listfriends_ID_seq"', 1, false);
+
+
+--
+-- TOC entry 2043 (class 0 OID 25899)
+-- Dependencies: 175
+-- Data for Name: partnerdetails; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- TOC entry 2067 (class 0 OID 0)
+-- Dependencies: 174
+-- Name: partnerdetails_ID_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('"partnerdetails_ID_seq"', 1, false);
+
+
+--
+-- TOC entry 1915 (class 2606 OID 25868)
+-- Name: accounts_UserName_key; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY accounts
+    ADD CONSTRAINT "accounts_UserName_key" UNIQUE ("UserName");
+
+
+--
+-- TOC entry 1917 (class 2606 OID 25866)
+-- Name: accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY accounts
+    ADD CONSTRAINT accounts_pkey PRIMARY KEY ("ID");
+
+
+--
+-- TOC entry 1923 (class 2606 OID 25991)
+-- Name: documents_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY documents
+    ADD CONSTRAINT documents_pkey PRIMARY KEY ("ID");
+
+
+--
+-- TOC entry 1925 (class 2606 OID 26022)
+-- Name: history_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY history
+    ADD CONSTRAINT history_pkey PRIMARY KEY ("ID");
+
+
+--
+-- TOC entry 1921 (class 2606 OID 25920)
+-- Name: listfriends_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY listfriends
+    ADD CONSTRAINT listfriends_pkey PRIMARY KEY ("ID");
+
+
+--
+-- TOC entry 1919 (class 2606 OID 25904)
+-- Name: partnerdetails_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY partnerdetails
+    ADD CONSTRAINT partnerdetails_pkey PRIMARY KEY ("ID");
+
+
+--
+-- TOC entry 1929 (class 2606 OID 25992)
+-- Name: documents_IDOwner_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY documents
+    ADD CONSTRAINT "documents_IDOwner_fkey" FOREIGN KEY ("IDOwner") REFERENCES accounts("ID");
+
+
+--
+-- TOC entry 1930 (class 2606 OID 26023)
+-- Name: history_User_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY history
+    ADD CONSTRAINT "history_User_fkey" FOREIGN KEY ("User") REFERENCES accounts("UserName");
+
+
+--
+-- TOC entry 1928 (class 2606 OID 25926)
+-- Name: lisfriends_Friend_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY listfriends
+    ADD CONSTRAINT "lisfriends_Friend_fkey" FOREIGN KEY ("Friend") REFERENCES accounts("UserName");
+
+
+--
+-- TOC entry 1927 (class 2606 OID 25921)
+-- Name: lisfriends_User_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY listfriends
+    ADD CONSTRAINT "lisfriends_User_fkey" FOREIGN KEY ("User") REFERENCES accounts("UserName");
+
+
+--
+-- TOC entry 1926 (class 2606 OID 25905)
+-- Name: partnerdetails_ID_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY partnerdetails
+    ADD CONSTRAINT "partnerdetails_ID_fkey" FOREIGN KEY ("IDMember") REFERENCES accounts("ID");
+
+
+--
+-- TOC entry 2056 (class 0 OID 0)
+-- Dependencies: 5
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+-- Completed on 2015-05-30 17:58:23
+
+--
+-- PostgreSQL database dump complete
+--
+
