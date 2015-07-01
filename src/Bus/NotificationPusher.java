@@ -7,6 +7,7 @@ package Bus;
 
 import CommunicatePackage.InvitePackage;
 import Pojo.Account;
+import Pojo.Document;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -44,7 +45,7 @@ public class NotificationPusher {
             ObjectOutputStream objectOutputStream = clients_out.get(username);
             ObjectInputStream objectInputStream = clients_in.get(username);
                         
-            objectOutputStream.writeObject(new InvitePackage(true, null, null));
+            objectOutputStream.writeObject(new InvitePackage(true, "", new Document(-1, null, null, null, -1, null)));
             objectOutputStream.flush();
             
             objectInputStream.close();                        
@@ -61,17 +62,13 @@ public class NotificationPusher {
             ObjectOutputStream oos = clients_out.get(username);
             ObjectInputStream ois = clients_in.get(username);
             InvitePackage invitePackage = (InvitePackage)message;
-            oos.writeObject(invitePackage);
+            oos.writeObject(message);
             oos.flush();
             
             boolean rs = ois.readBoolean();
-            boolean rs2 = false;
             if(rs){
                 Account temp = MyBus.getAccountByUsername(username);
-                rs2 = MyBus.insertMemberIntoDocument(invitePackage.document.getCode(), temp.getID());
-                
-                oos.writeBoolean(rs2);
-                oos.flush();                
+                MyBus.insertMemberIntoDocument(invitePackage.document.getCode(), temp.getID()); 
             }
             
         } catch (IOException ex) {

@@ -17,18 +17,20 @@ public class SendPushNotificationThread implements Runnable{
     
     Thread t;
     Document doc;
-    String username;    
+    String sender;    
+    String receiver;
 
-    SendPushNotificationThread(String sender, Document doc) {
+    SendPushNotificationThread(String sender, Document doc, String receiver) {
         this.doc = doc;
-        this.username = sender;
+        this.sender = sender;
+        this.receiver = receiver;
         t = new Thread(this);
         t.start();
     }
 
     @Override
     public void run() {
-        Global.notificationPusher.Notify(new InvitePackage(false, username, doc), username);
+        Global.notificationPusher.Notify(new InvitePackage(false, sender, doc), receiver);
     }
     
 }

@@ -44,7 +44,8 @@ public class ShareThread implements Runnable {
 
             if (Global.notificationPusher.CheckOnline(sharePackage.username)) {
                 Document doc = MyBus.getDocumentByCode(sharePackage.docCode);
-                SendPushNotificationThread sendPush = new SendPushNotificationThread(sharePackage.username,doc);                
+                String sender = MyBus.getUsernameByID(sharePackage.idClient);
+                SendPushNotificationThread sendPush = new SendPushNotificationThread(sender,doc, sharePackage.username);                
             } else {
                 result = Bus.MyBus.shareDocument(sharePackage.docCode, sharePackage.idClient, sharePackage.username);
             }
